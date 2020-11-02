@@ -13,6 +13,9 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
+import com.google.android.gms.tasks.Task;
+
+
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -23,24 +26,19 @@ public class MainActivity extends FlutterActivity {
     private static final String TAG = "Nearby Message API";
     private MessageListener mMessageListener;
 
+
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
         new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .setMethodCallHandler(
                         (call, result) -> {
-                            switch (call.method){
-                                case "subscribe":
-                                    subscribe();
+                            switch (call.method) {
+                                case "toggleSubscribe":
+                                    toggleSubscribe(call.argument("shouldScan"), result);
                                     break;
-                                case "backgroundSubscribe":
-                                    backgroundSubscribe();
-                                    break;
-                                case "unsubscribe":
-                                    unsubscribe();
-                                    break;
-                                case "backgroundUnsubscribe":
-                                    backgroundUnsubscribe();
+                                case "toggleBackgroundSubscribe":
+                                    toggleBackgroundSubscribe(call.argument("shouldBackgroundScan"), result);
                                     break;
                                 default:
                                     result.notImplemented();
@@ -73,30 +71,54 @@ public class MainActivity extends FlutterActivity {
         backgroundSubscribe();
     }
 
-    private void subscribe() {
-        Log.i(TAG, "Subscribing.");
+
+    private void toggleSubscribe(boolean shouldScan, MethodChannel.Result result) {
+        if (shouldScan) {
+            subscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
+                    .addOnFailureListener(e -> result.error("SUBSCRIBE", e.getMessage(), null));
+        } else {
+            unsubscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
+                    .addOnFailureListener(e -> result.error("UNSUBSCRIBE", e.getMessage(), null));
+        }
+    }
+
+    private void toggleBackgroundSubscribe(boolean shouldBackgroundScan, MethodChannel.Result result) {
+        Log.d(TAG, "" + shouldBackgroundScan);
+        if (shouldBackgroundScan) {
+            backgroundSubscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
+                    .addOnFailureListener(e -> result.error("BACKGROUND_SUBSCRIBE", e.getMessage(), null));
+        } else {
+            backgroundUnsubscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
+                    .addOnFailureListener(e -> result.error("BACKGROUND_UNSUBSCRIBE", e.getMessage(), null));
+        }
+    }
+
+    private Task<Void> subscribe() {
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
-        Nearby.getMessagesClient(this)
-                .subscribe(mMessageListener, options);
+        return Nearby.getMessagesClient(this).subscribe(mMessageListener, options);
     }
 
-    private void backgroundSubscribe() {
+    private Task<Void> backgroundSubscribe() {
         SubscribeOptions options = new SubscribeOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
-        Nearby.getMessagesClient(this).subscribe(getPendingIntent(), options);
+        return Nearby.getMessagesClient(this).subscribe(getPendingIntent(), options);
     }
 
 
-    private void unsubscribe() {
+    private Task<Void> unsubscribe() {
         Log.i(TAG, "Unsubscribing.");
-        Nearby.getMessagesClient(this).unsubscribe(mMessageListener);
+        return Nearby.getMessagesClient(this).unsubscribe(mMessageListener);
     }
 
-    private void backgroundUnsubscribe() {
-        Nearby.getMessagesClient(this).unsubscribe(getPendingIntent());
+    private Task<Void> backgroundUnsubscribe() {
+        return Nearby.getMessagesClient(MainActivity.this).unsubscribe(getPendingIntent());
     }
 
     private PendingIntent getPendingIntent() {

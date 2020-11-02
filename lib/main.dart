@@ -33,57 +33,28 @@ class _MyHomePageState extends State<MyHomePage> {
   bool backgroundScanning = true;
   static const platform = const MethodChannel('nearby-message-api');
 
-  void toggleScanning(value) {
-    if(value){
-      _subscribe();
-    }
-    else{
-      _unsubscribe();
-    }
-    setState(() {
-      scanning = !scanning;
-    });
-  }
-
-  void toggleBackgroundScanning(value){
-    if(value){
-      _backgroundSubscribe();
-    }
-    else{
-      _backgroundUnsubscribe();
-    }
-    setState(() {
-      backgroundScanning = !backgroundScanning;
-    });
-  }
-
-  Future<void> _subscribe() async {
-    try{
-      await platform.invokeMethod('subscribe');
+  Future<void> _toggleSubscribe(bool shouldScan) async {
+    try {
+      await platform.invokeMethod('toggleSubscribe', <String, bool>{
+        'shouldScan': shouldScan
+      });
+      setState(() {
+        scanning = shouldScan;
+      });
     } on PlatformException catch (e) {
       print(e);
     }
-  }
+}
 
-  Future<void> _backgroundSubscribe() async {
+  Future<void> _toggleBackgroundSubscribe(bool shouldBackgroundScan) async {
+    print(shouldBackgroundScan);
     try{
-      await platform.invokeMethod('backgroundSubscribe');
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> _unsubscribe() async {
-    try{
-      await platform.invokeMethod('unsubscribe');
-    } on PlatformException catch (e) {
-      print(e);
-    }
-  }
-
-  Future<void> _backgroundUnsubscribe() async {
-    try{
-      await platform.invokeMethod('backgroundUnsubscribe');
+      await platform.invokeMethod('toggleBackgroundSubscribe', <String, bool>{
+          'shouldBackgroundScan': shouldBackgroundScan
+      });
+      setState(() {
+        backgroundScanning = shouldBackgroundScan;
+      });
     } on PlatformException catch (e) {
       print(e);
     }
@@ -103,14 +74,14 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('Scan when app is running'),
-                Switch(value: scanning, onChanged: toggleScanning),
+                Switch(value: scanning, onChanged: _toggleSubscribe),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('Scan while app is not running'),
-                Switch(value: backgroundScanning, onChanged: toggleBackgroundScanning,)
+                Switch(value: backgroundScanning, onChanged: _toggleBackgroundSubscribe,)
               ],
             )
           ],
