@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
+import com.google.android.gms.nearby.messages.PublishOptions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.Task;
@@ -25,6 +26,7 @@ public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "nearby-message-api";
     private static final String TAG = "Nearby Message API";
     private MessageListener mMessageListener;
+    private Message mActiveMessage;
 
 
     @Override
@@ -126,9 +128,27 @@ public class MainActivity extends FlutterActivity {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    private void publish(String message) {
+        Log.i(TAG, "Publishing message: " + message);
+        mActiveMessage = new Message(message.getBytes());
+        PublishOptions publishOptions = new PublishOptions.Builder()
+                .setStrategy(Strategy.BLE_ONLY)
+                .build();
+        Nearby.getMessagesClient(this).publish(mActiveMessage, publishOptions);
+    }
+
+    private void unpublish() {
+        Log.i(TAG, "Unpublishing.");
+        if (mActiveMessage != null) {
+            Nearby.getMessagesClient(this).unpublish(mActiveMessage);
+            mActiveMessage = null;
+        }
+    }
+
     @Override
     protected void onStop() {
         unsubscribe();
+        unpublish();
         super.onStop();
     }
 }
