@@ -1,5 +1,5 @@
 import 'package:covid_19_contact_tracing_app/settings.dart';
-import 'package:covid_19_contact_tracing_app/symptoms.dart';
+import 'package:covid_19_contact_tracing_app/symptoms/symptoms.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

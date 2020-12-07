@@ -1,5 +1,7 @@
-import 'package:covid_19_contact_tracing_app/SymptomCard.dart';
+import 'package:covid_19_contact_tracing_app/symptoms/SymptomCard.dart';
 import 'package:flutter/material.dart';
+
+import 'confirmSymptoms.dart';
 
 class Symptoms extends StatefulWidget {
   @override
@@ -80,7 +82,11 @@ class _SymptomsState extends State<Symptoms> {
               child: RaisedButton(
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return ConfirmSymptoms(confirmHighTemp: highTemp, confirmCough: cough, confirmChangeSmellTaste: changeSmellTaste,);
+                  }));
+                },
                 child: Text('Continue'),
               ),
             )
