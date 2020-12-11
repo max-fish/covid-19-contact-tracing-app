@@ -1,7 +1,9 @@
 package com.example.covid_19_contact_tracing_app;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -36,11 +38,8 @@ public class MainActivity extends FlutterActivity {
                 .setMethodCallHandler(
                         (call, result) -> {
                             switch (call.method) {
-                                case "toggleSubscribe":
-                                    toggleSubscribe(call.argument("shouldScan"), result);
-                                    break;
-                                case "toggleBackgroundSubscribe":
-                                    toggleBackgroundSubscribe(call.argument("shouldBackgroundScan"), result);
+                                case "toggleContactTracing":
+                                    toggleContactTracing(call.argument("shouldTrace"), result);
                                     break;
                                 default:
                                     result.notImplemented();
@@ -69,30 +68,26 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        subscribe();
-        backgroundSubscribe();
-    }
-
-
-    private void toggleSubscribe(boolean shouldScan, MethodChannel.Result result) {
-        if (shouldScan) {
-            subscribe()
-                    .addOnSuccessListener(aVoid -> result.success(null))
-                    .addOnFailureListener(e -> result.error("SUBSCRIBE", e.getMessage(), null));
-        } else {
-            unsubscribe()
-                    .addOnSuccessListener(aVoid -> result.success(null))
-                    .addOnFailureListener(e -> result.error("UNSUBSCRIBE", e.getMessage(), null));
+        SharedPreferences prefs = getContext().getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE);
+        boolean contactTracePref = prefs.getBoolean("flutter." + "contactTracing", false);
+        Log.d(TAG, "" + contactTracePref);
+        if(contactTracePref){
+            subscribe();
+            backgroundSubscribe();
         }
     }
 
-    private void toggleBackgroundSubscribe(boolean shouldBackgroundScan, MethodChannel.Result result) {
-        Log.d(TAG, "" + shouldBackgroundScan);
-        if (shouldBackgroundScan) {
+
+    private void toggleContactTracing(boolean shouldScan, MethodChannel.Result result) {
+        if (shouldScan) {
+            subscribe()
+                    .addOnFailureListener(e -> result.error("SUBSCRIBE", e.getMessage(), null));
             backgroundSubscribe()
                     .addOnSuccessListener(aVoid -> result.success(null))
                     .addOnFailureListener(e -> result.error("BACKGROUND_SUBSCRIBE", e.getMessage(), null));
         } else {
+            unsubscribe()
+                    .addOnFailureListener(e -> result.error("UNSUBSCRIBE", e.getMessage(), null));
             backgroundUnsubscribe()
                     .addOnSuccessListener(aVoid -> result.success(null))
                     .addOnFailureListener(e -> result.error("BACKGROUND_UNSUBSCRIBE", e.getMessage(), null));
