@@ -1,5 +1,5 @@
 import 'package:covid_19_contact_tracing_app/settings.dart';
-import 'package:covid_19_contact_tracing_app/symptoms/symptoms.dart';
+import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[Symptoms(), Settings()];
+  static List<Widget> _widgetOptions = <Widget>[SymptomsSelection(), Settings()];
 
   void _onItemTapped(int index) {
     setState(() {

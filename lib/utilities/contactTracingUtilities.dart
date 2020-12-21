@@ -14,6 +14,19 @@ class ContactTracingUtilities {
     );
   }
 
+  static SnackBar _makeSnackBar(
+      BuildContext context, String text, Color backgroundColor) {
+    return SnackBar(
+      content: Text(
+        text,
+        style:
+            Theme.of(context).textTheme.bodyText2.copyWith(color: Colors.white),
+      ),
+      backgroundColor: backgroundColor,
+      behavior: SnackBarBehavior.floating,
+    );
+  }
+
   static Future<void> toggleContactTracing(
       BuildContext context, bool shouldTrace) async {
     try {
@@ -21,36 +34,17 @@ class ContactTracingUtilities {
           'toggleContactTracing', <String, bool>{'shouldTrace': shouldTrace});
       UserPreferences.setContactTracingPreference(shouldTrace);
       if (shouldTrace) {
-        final snackBar = SnackBar(
-          content: Text(
-            'Contact Tracing Enabled',
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: Colors.white),
-          ),
-          behavior: SnackBarBehavior.floating,
-        );
+        final snackBar =
+            _makeSnackBar(context, 'Contact Tracing Enabled', Colors.blue);
         Scaffold.of(context).showSnackBar(snackBar);
       } else {
-        final snackBar = SnackBar(
-          content: Text(
-              'Contact Tracing Disabled (You will not be alerted of possible exposure when using the app)',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(color: Colors.white)),
-          behavior: SnackBarBehavior.floating,
-        );
+        final snackBar =
+            _makeSnackBar(context, 'Contact Tracing Disabled', Colors.blue);
         Scaffold.of(context).showSnackBar(snackBar);
       }
       await _mediumImpact();
     } on PlatformException catch (e) {
-      final snackBar = SnackBar(
-        content: Text(
-          e.message,
-        ),
-      );
+      final snackBar = _makeSnackBar(context, e.message, Colors.red);
       Scaffold.of(context).showSnackBar(snackBar);
     }
   }
@@ -60,9 +54,9 @@ class ContactTracingUtilities {
     _publish(context, noSickMessage);
   }
 
-  static void publishSymptoms(BuildContext context) {
+  static void publishSymptoms(BuildContext context, DateTime symptomsStartDate) {
     Message symptomMessage =
-        Message(userId: "", sick: true, reason: SickReason.SYMPTOMS);
+        Message(userId: "", sick: true, reason: SickReason.SYMPTOMS, symptomsStartDate: symptomsStartDate);
     _publish(context, symptomMessage);
   }
 
@@ -77,9 +71,7 @@ class ContactTracingUtilities {
       await _platform.invokeMethod(
           'publish', <String, String>{'message': message.toJsonString()});
     } on PlatformException catch (e) {
-      final snackBar = SnackBar(
-        content: Text(e.message),
-      );
+      final snackBar = _makeSnackBar(context, e.message, Colors.red);
       Scaffold.of(context).showSnackBar(snackBar);
     }
   }
