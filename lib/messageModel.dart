@@ -7,14 +7,12 @@ class Message {
   final bool sick;
   final SickReason reason;
   final DateTime symptomsStartDate;
-  final List symptoms;
 
   Message(
       {@required this.userId,
       @required this.sick,
       this.reason,
-      this.symptomsStartDate,
-      this.symptoms});
+      this.symptomsStartDate});
 
   factory Message.fromJsonString(String jsonString) {
     Map<String, dynamic> json = jsonDecode(jsonString);
@@ -23,7 +21,7 @@ class Message {
         sick: json['sick'],
         reason: json['reason'],
         symptomsStartDate: json['symptomsStartDate'],
-        symptoms: json['symptoms']);
+    );
   }
 
   String toJsonString() {
@@ -32,7 +30,6 @@ class Message {
       'sick': sick,
       'reason': reason,
       'symptomsStartDate': symptomsStartDate,
-      'symptoms': symptoms
     });
   }
 }
