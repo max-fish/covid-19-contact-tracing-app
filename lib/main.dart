@@ -1,9 +1,14 @@
 import 'package:covid_19_contact_tracing_app/settings.dart';
 import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+  print(userCredential.user.uid);
   runApp(MyApp());
 }
 
