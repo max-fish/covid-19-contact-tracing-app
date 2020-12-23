@@ -1,7 +1,6 @@
 package com.example.covid_19_contact_tracing_app;
 
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.Task;
 
 
+import java.util.HashMap;
 
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
@@ -27,6 +27,7 @@ import io.flutter.plugin.common.MethodChannel;
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "nearby-message-api";
     private static final String TAG = "Nearby Message API";
+    private MethodChannel methodChannel;
     private MessageListener mMessageListener;
     private Message mActiveMessage;
 
@@ -34,19 +35,20 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
         super.configureFlutterEngine(flutterEngine);
-        new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
-                .setMethodCallHandler(
-                        (call, result) -> {
-                            switch (call.method) {
-                                case "toggleContactTracing":
-                                    toggleContactTracing(call.argument("shouldTrace"), result);
-                                    break;
-                                default:
-                                    result.notImplemented();
-                                    break;
-                            }
-                        }
-                );
+        methodChannel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL);
+
+        methodChannel.setMethodCallHandler(
+                (call, result) -> {
+                    switch (call.method) {
+                        case "toggleContactTracing":
+                            toggleContactTracing(call.argument("shouldTrace"), result);
+                            break;
+                        default:
+                            result.notImplemented();
+                            break;
+                    }
+                }
+        );
     }
 
     @Override
@@ -56,6 +58,9 @@ public class MainActivity extends FlutterActivity {
             @Override
             public void onFound(Message message) {
                 Log.d(TAG, "Found message: " + new String(message.getContent()));
+                methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
+                    put("message", message.getContent().toString());
+                }});
             }
 
             @Override
@@ -71,7 +76,7 @@ public class MainActivity extends FlutterActivity {
         SharedPreferences prefs = getContext().getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE);
         boolean contactTracePref = prefs.getBoolean("flutter." + "contactTracing", false);
         Log.d(TAG, "" + contactTracePref);
-        if(contactTracePref){
+        if (contactTracePref) {
             subscribe();
             backgroundSubscribe();
         }
