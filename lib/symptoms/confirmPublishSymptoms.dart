@@ -41,8 +41,10 @@ class ConfirmPublishSymtoms extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   child: Text('Submit', style: TextStyle(color: Colors.white)),
-                  onPressed: () =>
-                      ContactTracingUtilities.publishSymptoms(context, startDate),
+                  onPressed: () {
+                    ContactTracingUtilities.publishSymptoms(context, startDate);
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  }
                 ),
               ],
             )

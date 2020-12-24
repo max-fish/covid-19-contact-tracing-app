@@ -43,6 +43,8 @@ public class MainActivity extends FlutterActivity {
                         case "toggleContactTracing":
                             toggleContactTracing(call.argument("shouldTrace"), result);
                             break;
+                        case "publish":
+                            publish(call.argument("message"), result);
                         default:
                             result.notImplemented();
                             break;
@@ -128,13 +130,15 @@ public class MainActivity extends FlutterActivity {
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    private void publish(String message) {
+    private void publish(String message, MethodChannel.Result result) {
         Log.i(TAG, "Publishing message: " + message);
         mActiveMessage = new Message(message.getBytes());
         PublishOptions publishOptions = new PublishOptions.Builder()
                 .setStrategy(Strategy.BLE_ONLY)
                 .build();
-        Nearby.getMessagesClient(this).publish(mActiveMessage, publishOptions);
+        Nearby.getMessagesClient(this).publish(mActiveMessage, publishOptions)
+                .addOnSuccessListener(aVoid -> result.success(null))
+                .addOnFailureListener(e -> result.error("PUBLISH", e.getMessage(), null));
     }
 
     private void unpublish() {
@@ -148,7 +152,6 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onStop() {
         unsubscribe();
-        unpublish();
         super.onStop();
     }
 }
