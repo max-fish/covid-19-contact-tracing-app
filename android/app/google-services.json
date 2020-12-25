@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1007655739311",
+    "project_id": "true-sprite-293514",
+    "storage_bucket": "true-sprite-293514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1007655739311:android:5c5d59deefcf9f3a6e995a",
+        "android_client_info": {
+          "package_name": "com.example.covid_19_contact_tracing_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1007655739311-g8nfdhubp9s22rlu65m8l2m9t5bggt9l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeq5ZEM0H2iozai2ChFpT9ewZlqQV0BCo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1007655739311-g8nfdhubp9s22rlu65m8l2m9t5bggt9l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1007655739311-8l6ogg1t0d6n8g2ifj5sagi8ahuutgdk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.covid19ContactTracingApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
