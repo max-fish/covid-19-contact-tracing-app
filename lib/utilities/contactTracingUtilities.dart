@@ -16,7 +16,10 @@ class ContactTracingUtilities {
     if(call.method == "messageReceived"){
       Message receivedMessage = Message.fromJsonString(call.arguments('message'));
       if(receivedMessage.sick){
-        //add to sqlite db
+        //notify user
+      }
+      else{
+        //add to db
       }
     }
   }
