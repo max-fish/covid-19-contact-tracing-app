@@ -1,9 +1,11 @@
+import 'package:covid_19_contact_tracing_app/dragSection.dart';
 import 'package:covid_19_contact_tracing_app/settings.dart';
 import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
 import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,8 +63,33 @@ class _MyHomePageState extends State<MyHomePage> {
               .copyWith(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: Stack(
+        children: [
+          Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          SnappingSheet(
+            sheetBelow: SnappingSheetContent(
+              child: Container(
+                color: Colors.red,
+              ),
+              heightBehavior: SnappingSheetHeight.fit(),
+            ),
+            grabbing: DragSection(),
+            grabbingHeight: 100,
+            initSnapPosition: SnapPosition(positionFactor: 0),
+            snapPositions: [
+              SnapPosition(
+                positionFactor: 0,
+                snappingDuration: Duration(milliseconds: 100)
+              ),
+              SnapPosition(
+                  positionFactor: 0.5,
+                  snappingDuration: Duration(milliseconds: 100)
+              ),
+            ],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
