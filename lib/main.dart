@@ -1,4 +1,5 @@
 import 'package:covid_19_contact_tracing_app/dragSection.dart';
+import 'package:covid_19_contact_tracing_app/pageButton.dart';
 import 'package:covid_19_contact_tracing_app/settings.dart';
 import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
 import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
@@ -71,9 +72,24 @@ class _MyHomePageState extends State<MyHomePage> {
           SnappingSheet(
             sheetBelow: SnappingSheetContent(
               child: Container(
-                color: Colors.red,
+                color: Colors.white,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  childAspectRatio: 1,
+                  children: [
+                    PageButton(
+                      icon: Icons.thermostat_rounded,
+                      pageName: 'Check Symptoms',
+                      onPress: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SymptomsSelection())
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-              heightBehavior: SnappingSheetHeight.fit(),
+              heightBehavior: SnappingSheetHeight.fixed(),
             ),
             grabbing: DragSection(),
             grabbingHeight: 100,
