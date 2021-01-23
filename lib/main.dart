@@ -1,6 +1,5 @@
 import 'package:covid_19_contact_tracing_app/dragSection.dart';
 import 'package:covid_19_contact_tracing_app/pageButton.dart';
-import 'package:covid_19_contact_tracing_app/settings.dart';
 import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
 import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,16 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
-
-  static List<Widget> _widgetOptions = <Widget>[SymptomsSelection(), Settings()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,9 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Stack(
         children: [
-          Center(
-            child: _widgetOptions.elementAt(_selectedIndex),
-          ),
           SnappingSheet(
             sheetBelow: SnappingSheetContent(
               child: Container(
@@ -106,16 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'settings')
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
       ),
     );
   }
