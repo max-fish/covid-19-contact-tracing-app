@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'package:covid_19_contact_tracing_app/dragSection.dart';
-import 'package:covid_19_contact_tracing_app/pageButton.dart';
-import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
+import 'package:covid_19_contact_tracing_app/widgets/dragSection.dart';
+import 'package:covid_19_contact_tracing_app/widgets/pageButton.dart';
 import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'pages/symptoms/symptomsSelection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
-import 'package:covid_19_contact_tracing_app/messageModel.dart';
-import 'package:covid_19_contact_tracing_app/sharedPreferences.dart';
-import 'package:covid_19_contact_tracing_app/sickReason.dart';
+import 'package:covid_19_contact_tracing_app/models/messageModel.dart';
+import 'package:covid_19_contact_tracing_app/utilities/sharedPreferences.dart';
+import 'package:covid_19_contact_tracing_app/models/sickReason.dart';
 import 'package:covid_19_contact_tracing_app/utilities/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

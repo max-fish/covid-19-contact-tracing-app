@@ -1,6 +1,7 @@
-import 'package:covid_19_contact_tracing_app/symptoms/symptoms.dart';
-import 'package:covid_19_contact_tracing_app/symptoms/symptomsDatePicker.dart';
+import 'package:covid_19_contact_tracing_app/utilities/symptomUtilities.dart';
 import 'package:flutter/material.dart';
+
+import 'symptomsDatePicker.dart';
 
 class ConfirmSymptoms extends StatelessWidget {
   final bool confirmHighTemp;

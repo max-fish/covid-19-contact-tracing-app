@@ -1,7 +1,7 @@
-import 'package:covid_19_contact_tracing_app/sharedPreferences.dart';
+import 'package:covid_19_contact_tracing_app/utilities/sharedPreferences.dart';
 import 'package:flutter/material.dart';
 
-import 'utilities/contactTracingUtilities.dart';
+import '../utilities/contactTracingUtilities.dart';
 
 class DragSection extends StatefulWidget {
   @override

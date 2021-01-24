@@ -1,4 +1,4 @@
-import 'package:covid_19_contact_tracing_app/sickReason.dart';
+import 'package:covid_19_contact_tracing_app/models/sickReason.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 

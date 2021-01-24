@@ -1,4 +1,4 @@
-import 'package:covid_19_contact_tracing_app/symptoms/SymptomCard.dart';
+import 'package:covid_19_contact_tracing_app/widgets/SymptomCard.dart';
 import 'package:flutter/material.dart';
 
 import 'confirmSymptoms.dart';
