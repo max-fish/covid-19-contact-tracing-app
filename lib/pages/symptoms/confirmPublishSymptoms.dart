@@ -1,4 +1,4 @@
-import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
+import '../../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmPublishSymtoms extends StatelessWidget {
@@ -24,7 +24,7 @@ class ConfirmPublishSymtoms extends StatelessWidget {
                 'We will now notify people who you have been in contact with that you are experiencing symptoms of COVID-19. No personal data will be shared. Is this ok?',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headline6,),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Row(
@@ -34,13 +34,13 @@ class ConfirmPublishSymtoms extends StatelessWidget {
                   RaisedButton(
                     color: Colors.red,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                    child: Text('Cancel', style: TextStyle(color: Colors.white),),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.white),),
                     onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),),
-                  SizedBox(width: 10,),
+                  const SizedBox(width: 10,),
                   RaisedButton(
                   color: Theme.of(context).primaryColor,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                  child: Text('Submit', style: TextStyle(color: Colors.white)),
+                  child: const Text('Submit', style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     ContactTracingUtilities.publishSymptoms(context, startDate);
                     Navigator.popUntil(context, (route) => route.isFirst);

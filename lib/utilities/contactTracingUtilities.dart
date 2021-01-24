@@ -1,7 +1,7 @@
-import 'package:covid_19_contact_tracing_app/models/messageModel.dart';
-import 'package:covid_19_contact_tracing_app/utilities/sharedPreferences.dart';
-import 'package:covid_19_contact_tracing_app/models/sickReason.dart';
-import 'package:covid_19_contact_tracing_app/utilities/authService.dart';
+import '../models/messageModel.dart';
+import 'sharedPreferences.dart';
+import '../models/sickReason.dart';
+import 'authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,8 +13,8 @@ class ContactTracingUtilities {
   }
 
   static Future<void> _receivedMessage(MethodCall call) async {
-    if(call.method == "messageReceived"){
-      Message receivedMessage = Message.fromJsonString(call.arguments('message'));
+    if(call.method == 'messageReceived'){
+      final Message receivedMessage = Message.fromJsonString(call.arguments('message'));
       if(receivedMessage.sick){
         //notify user
       }
@@ -67,18 +67,18 @@ class ContactTracingUtilities {
   }
 
   static void publishNotSick(BuildContext context) {
-    Message noSickMessage = Message(userId: AuthService.userId, sick: false);
+    final Message noSickMessage = Message(userId: AuthService.userId, sick: false);
     _publish(context, noSickMessage);
   }
 
   static void publishSymptoms(BuildContext context, DateTime symptomsStartDate) {
-    Message symptomMessage =
+    final Message symptomMessage =
         Message(userId: AuthService.userId, sick: true, reason: SickReason.SYMPTOMS, symptomsStartDate: symptomsStartDate);
     _publish(context, symptomMessage);
   }
 
   static void publishPositiveTest(BuildContext context) {
-    Message positiveTestMessage =
+    final Message positiveTestMessage =
         Message(userId: AuthService.userId, sick: true, reason: SickReason.POSITIVE_TEST);
     _publish(context, positiveTestMessage);
   }

@@ -1,6 +1,5 @@
-import 'package:covid_19_contact_tracing_app/utilities/sharedPreferences.dart';
+import '../utilities/sharedPreferences.dart';
 import 'package:flutter/material.dart';
-
 import '../utilities/contactTracingUtilities.dart';
 
 class DragSection extends StatefulWidget {
@@ -19,17 +18,17 @@ class _DragSectionState extends State<DragSection> {
           boxShadow: <BoxShadow>[
             BoxShadow(blurRadius: 20.0, color: Colors.black.withOpacity(0.2))
           ],
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
       child: Column(
         children: [
           Container(
             width: 100.0,
             height: 10.0,
-            margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
+            margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
             decoration: BoxDecoration(
                 color: Colors.grey[300],
-                borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                borderRadius: const BorderRadius.all(Radius.circular(5.0))),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -55,7 +54,7 @@ class _DragSectionState extends State<DragSection> {
                             setState(() {});
                           },
                           child: Padding(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             child: Icon(Icons.bluetooth_audio_rounded,
                                 color: (snapshot.data ?? false)
                                     ? Colors.white

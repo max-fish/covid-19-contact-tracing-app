@@ -22,7 +22,7 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
     final DateTime picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: currentDate.subtract(Duration(days: 5)),
+      firstDate: currentDate.subtract(const Duration(days: 5)),
       lastDate: currentDate,
     );
     if (picked != null && picked != selectedDate)
@@ -35,7 +35,7 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Start Date'),
+        title: const Text('Start Date'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -58,7 +58,7 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
                         .textTheme
                         .headline4,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   OutlineButton(
@@ -72,7 +72,7 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
                       children: 
                         [
                           Icon(Icons.calendar_today_rounded, color: Theme.of(context).primaryColor,),
-                          SizedBox(width: 5,),
+                          const SizedBox(width: 5,),
                           Text(
                           'Select Date',
                           style: TextStyle(color: Theme.of(context).primaryColor),
@@ -84,15 +84,15 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
               ),
             ),
             Align(
-              alignment: Alignment(0, 0.65),
+              alignment: const Alignment(0, 0.65),
               child: ButtonTheme(
                 minWidth: MediaQuery.of(context).size.width * 0.8,
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
-                  child: Text('Confirm Date', style: TextStyle(color: Colors.white),),
+                  child: const Text('Confirm Date', style: TextStyle(color: Colors.white),),
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return ConfirmPublishSymtoms();
+                      return const ConfirmPublishSymtoms();
                     }));
                   },
                 ),

@@ -15,7 +15,7 @@ class SymptomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 16),
+      margin: const EdgeInsets.only(top: 16),
       child: InkResponse(
         onTap: onActiveChange,
         child: Card(
@@ -41,7 +41,7 @@ class SymptomCard extends StatelessWidget {
                     Flexible(child: Text(title, style: Theme.of(context).textTheme.headline6,)),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Align(alignment: Alignment.centerLeft,child: Text(description,))
               ],
             ),

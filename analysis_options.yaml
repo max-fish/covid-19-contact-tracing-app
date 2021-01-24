@@ -5,6 +5,8 @@ analyzer:
     avoid_empty_else: warning
     prefer_const_constructors: error
     prefer_single_quotes: warning
+    prefer_final_fields: error
+    prefer_final_locals: error
 
 linter:
   rules:
@@ -13,3 +15,5 @@ linter:
     - avoid_empty_else
     - prefer_const_constructors
     - prefer_single_quotes
+    - prefer_final_fields
+    - prefer_final_locals

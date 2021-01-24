@@ -1,4 +1,4 @@
-import 'package:covid_19_contact_tracing_app/utilities/symptomUtilities.dart';
+import '../../utilities/symptomUtilities.dart';
 import 'package:flutter/material.dart';
 
 import 'symptomsDatePicker.dart';
@@ -28,17 +28,17 @@ class ConfirmSymptoms extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              "Confirm your symptoms",
+              'Confirm your symptoms',
               style: Theme.of(context).textTheme.headline4,
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Align(
                 alignment: Alignment.centerLeft,
-                child: Text("You are experiencing:",
+                child: Text('You are experiencing:',
                     style: Theme.of(context).textTheme.headline6)),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             ...confirmSymptomList
@@ -48,7 +48,7 @@ class ConfirmSymptoms extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.check,
                             color: Colors.green,
                           ),
@@ -56,16 +56,16 @@ class ConfirmSymptoms extends StatelessWidget {
                         ],
                       ),
                     ))),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "You are not experiencing:",
+                  'You are not experiencing:',
                   style: Theme.of(context).textTheme.headline6,
                 )),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             ...confirmSymptomList
@@ -75,20 +75,20 @@ class ConfirmSymptoms extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
                         children: [
-                          Icon(Icons.close, color: Colors.red),
+                          const Icon(Icons.close, color: Colors.red),
                           Text(e[1]),
                         ],
                       ),
                     ))),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Container(
-              margin: EdgeInsets.only(left: 24, right: 24),
+              margin: const EdgeInsets.only(left: 24, right: 24),
               child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
-                  child: Text("Confirm symptoms"),
+                  child: const Text('Confirm symptoms'),
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {

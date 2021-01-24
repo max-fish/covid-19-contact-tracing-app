@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:covid_19_contact_tracing_app/widgets/dragSection.dart';
-import 'package:covid_19_contact_tracing_app/widgets/pageButton.dart';
-import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
+import 'widgets/dragSection.dart';
+import 'widgets/pageButton.dart';
+import 'utilities/contactTracingUtilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   if(FirebaseAuth.instance.currentUser == null) {
-    UserCredential userCredential = await FirebaseAuth.instance
+    final UserCredential userCredential = await FirebaseAuth.instance
         .signInAnonymously();
     print(userCredential.user.uid);
   }
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
+          textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage());
@@ -44,9 +44,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
+  static const CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
@@ -95,17 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   ],
                 ),
               ),
-              heightBehavior: SnappingSheetHeight.fixed(),
+              heightBehavior: const SnappingSheetHeight.fixed(),
             ),
             grabbing: DragSection(),
             grabbingHeight: 100,
-            initSnapPosition: SnapPosition(positionFactor: 0),
+            initSnapPosition: const SnapPosition(positionFactor: 0),
             snapPositions: [
-              SnapPosition(
+              const SnapPosition(
                 positionFactor: 0,
                 snappingDuration: Duration(milliseconds: 100)
               ),
-              SnapPosition(
+              const SnapPosition(
                   positionFactor: 0.5,
                   snappingDuration: Duration(milliseconds: 100)
               ),

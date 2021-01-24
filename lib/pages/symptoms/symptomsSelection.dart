@@ -1,4 +1,4 @@
-import 'package:covid_19_contact_tracing_app/widgets/SymptomCard.dart';
+import '../../widgets/SymptomCard.dart';
 import 'package:flutter/material.dart';
 
 import 'confirmSymptoms.dart';
@@ -66,7 +66,7 @@ class _SymptomsSelectionState extends State<SymptomsSelection> {
                 description:
                     'Have you noticed that you cannot smell or taste anything, or that things smell or taste different to normal?',
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Text(
@@ -76,11 +76,11 @@ class _SymptomsSelectionState extends State<SymptomsSelection> {
                     color: Theme.of(context).primaryColor,
                     decoration: TextDecoration.underline),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Container(
-                margin: EdgeInsets.only(left: 24, right: 24),
+                margin: const EdgeInsets.only(left: 24, right: 24),
                 child: RaisedButton(
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
@@ -89,7 +89,7 @@ class _SymptomsSelectionState extends State<SymptomsSelection> {
                       return ConfirmSymptoms(confirmHighTemp: highTemp, confirmCough: cough, confirmChangeSmellTaste: changeSmellTaste,);
                     }));
                   },
-                  child: Text('Continue'),
+                  child: const Text('Continue'),
                 ),
               )
             ],
