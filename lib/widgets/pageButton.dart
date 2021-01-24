@@ -10,11 +10,12 @@ class PageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.circular(1000),
-      child: InkWell(
+      type: MaterialType.transparency,
+      child: InkResponse(
         borderRadius: BorderRadius.circular(1000),
         splashColor: Colors.grey,
         onTap: onPress,
+        radius: 70,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -77,7 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 child: GridView.count(
                   crossAxisCount: 2,
-                  childAspectRatio: 1,
                   children: [
                     PageButton(
                       icon: Icons.thermostat_rounded,
@@ -88,6 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       },
                     ),
+                    PageButton(
+                      icon: Icons.input_rounded,
+                      pageName: 'Enter Test Result',
+                      onPress: () {}
+                    )
                   ],
                 ),
               ),
