@@ -9,9 +9,14 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="covid_19_contact_tracing_app"
         android:icon="@mipmap/ic_launcher">
+
         <meta-data
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="@string/NEARBYMESSAGEAPIKEY" />
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="@string/MAPSAPIKEY"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
