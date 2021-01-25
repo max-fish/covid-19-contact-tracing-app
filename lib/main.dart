@@ -1,15 +1,20 @@
-import 'package:covid_19_contact_tracing_app/settings.dart';
-import 'package:covid_19_contact_tracing_app/symptoms/symptomsSelection.dart';
-import 'package:covid_19_contact_tracing_app/utilities/contactTracingUtilities.dart';
+import 'dart:async';
+import 'widgets/dragSection.dart';
+import 'widgets/pageButton.dart';
+import 'utilities/contactTracingUtilities.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'pages/symptoms/symptomsSelection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   if(FirebaseAuth.instance.currentUser == null) {
-    UserCredential userCredential = await FirebaseAuth.instance
+    final UserCredential userCredential = await FirebaseAuth.instance
         .signInAnonymously();
     print(userCredential.user.uid);
   }
@@ -24,7 +29,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
-          textTheme: TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
+          textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage());
@@ -39,16 +44,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 0;
+  final Completer<GoogleMapController> _controller = Completer();
 
-  static List<Widget> _widgetOptions = <Widget>[SymptomsSelection(), Settings()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+  static const CameraPosition _kGooglePlex = const CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,18 +62,56 @@ class _MyHomePageState extends State<MyHomePage> {
               .copyWith(color: Colors.white),
         ),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'settings')
+      body: Stack(
+        children: [
+          GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          ),
+          SnappingSheet(
+            sheetBelow: SnappingSheetContent(
+              child: Container(
+                color: Colors.white,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  children: [
+                    PageButton(
+                      icon: Icons.thermostat_rounded,
+                      pageName: 'Check Symptoms',
+                      onPress: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SymptomsSelection())
+                        );
+                      },
+                    ),
+                    PageButton(
+                      icon: Icons.input_rounded,
+                      pageName: 'Enter Test Result',
+                      onPress: () {}
+                    )
+                  ],
+                ),
+              ),
+              heightBehavior: const SnappingSheetHeight.fixed(),
+            ),
+            grabbing: DragSection(),
+            grabbingHeight: 100,
+            initSnapPosition: const SnapPosition(positionFactor: 0),
+            snapPositions: [
+              const SnapPosition(
+                positionFactor: 0,
+                snappingDuration: Duration(milliseconds: 100)
+              ),
+              const SnapPosition(
+                  positionFactor: 0.5,
+                  snappingDuration: Duration(milliseconds: 100)
+              ),
+            ],
+          ),
         ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
       ),
     );
   }
