@@ -1,4 +1,4 @@
-import '../utilities/sharedPreferences.dart';
+import '../utilities/userPreferences.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showContactTracingAlertDialog(BuildContext context) {
