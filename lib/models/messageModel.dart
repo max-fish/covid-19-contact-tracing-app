@@ -19,7 +19,7 @@ class Message {
     return Message(
         userId: json['userId'],
         sick: json['sick'],
-        reason: json['reason'],
+        reason: getReasonFromString(json['reason']),
         symptomsStartDate: json['symptomsStartDate'],
     );
   }
@@ -28,7 +28,7 @@ class Message {
     return jsonEncode({
       'userId': userId,
       'sick': sick,
-      'reason': reason,
+      'reason': reason.toString(),
       'symptomsStartDate': symptomsStartDate,
     });
   }

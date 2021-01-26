@@ -1,6 +1,7 @@
 import '../utilities/sharedPreferences.dart';
 import 'package:flutter/material.dart';
 import '../utilities/contactTracingUtilities.dart';
+import '../widgets/contactTracingAlertDialog.dart';
 
 class DragSection extends StatefulWidget {
   @override
@@ -9,6 +10,16 @@ class DragSection extends StatefulWidget {
 
 class _DragSectionState extends State<DragSection> {
   bool locationSharing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    UserPreferences.getContactTracingPreference().then((pref) {
+      if(pref == null){
+        showContactTracingAlertDialog(context);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

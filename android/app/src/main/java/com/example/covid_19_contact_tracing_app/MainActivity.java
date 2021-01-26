@@ -45,6 +45,7 @@ public class MainActivity extends FlutterActivity {
                             break;
                         case "publish":
                             publish(call.argument("message"), result);
+                            break;
                         default:
                             result.notImplemented();
                             break;
@@ -75,6 +76,7 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "starting");
         SharedPreferences prefs = getContext().getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE);
         boolean contactTracePref = prefs.getBoolean("flutter." + "contactTracing", false);
         Log.d(TAG, "" + contactTracePref);
