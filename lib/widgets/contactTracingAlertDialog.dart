@@ -1,9 +1,9 @@
-import '../utilities/userPreferences.dart';
+import '../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showContactTracingAlertDialog(BuildContext context) {
+Future<void> showContactTracingAlertDialog(BuildContext dragSectionContext) {
   return showDialog<void>(
-    context: context,
+    context: dragSectionContext,
     barrierDismissible: false,
     builder: (BuildContext context) {
       return AlertDialog(
@@ -12,13 +12,13 @@ Future<void> showContactTracingAlertDialog(BuildContext context) {
         actions: [
           FlatButton(
             onPressed: () {
-              UserPreferences.setContactTracingPreference(false);
+              ContactTracingUtilities.toggleContactTracing(dragSectionContext, false);
               Navigator.pop(context);
             },
             child: const Text('Leave it off')),
           FlatButton(
             onPressed: () {
-              UserPreferences.setContactTracingPreference(true);
+              ContactTracingUtilities.toggleContactTracing(dragSectionContext, true);
               Navigator.pop(context);
             },
               child: const Text('Turn it on'))
