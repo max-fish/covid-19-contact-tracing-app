@@ -19,7 +19,7 @@ void main() async {
     print(userCredential.user.uid);
   }
   ContactTracingUtilities.init();
-  UserPreferences.init();
+  await UserPreferences.init();
   runApp(MyApp());
 }
 
