@@ -45,6 +45,7 @@ public class MainActivity extends FlutterActivity {
                             break;
                         case "publish":
                             publish(call.argument("message"), result);
+                            break;
                         default:
                             result.notImplemented();
                             break;
@@ -59,7 +60,7 @@ public class MainActivity extends FlutterActivity {
         mMessageListener = new MessageListener() {
             @Override
             public void onFound(Message message) {
-                Log.d(TAG, "Found message: " + new String(message.getContent()));
+                Log.d(TAG, "Found message: " + message);
                 methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
                     put("message", message.getContent().toString());
                 }});
@@ -75,12 +76,12 @@ public class MainActivity extends FlutterActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "starting");
         SharedPreferences prefs = getContext().getSharedPreferences("FlutterSharedPreferences", MODE_PRIVATE);
         boolean contactTracePref = prefs.getBoolean("flutter." + "contactTracing", false);
         Log.d(TAG, "" + contactTracePref);
         if (contactTracePref) {
             subscribe();
-            backgroundSubscribe();
         }
     }
 
@@ -133,8 +134,12 @@ public class MainActivity extends FlutterActivity {
     private void publish(String message, MethodChannel.Result result) {
         Log.i(TAG, "Publishing message: " + message);
         mActiveMessage = new Message(message.getBytes());
+        Strategy publishStrategy = new Strategy.Builder()
+                .setTtlSeconds(Strategy.TTL_SECONDS_MAX)
+                .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT)
+                .build();
         PublishOptions publishOptions = new PublishOptions.Builder()
-                .setStrategy(Strategy.BLE_ONLY)
+                .setStrategy(publishStrategy)
                 .build();
         Nearby.getMessagesClient(this).publish(mActiveMessage, publishOptions)
                 .addOnSuccessListener(aVoid -> result.success(null))

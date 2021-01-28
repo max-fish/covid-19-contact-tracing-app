@@ -1,5 +1,5 @@
 import '../models/messageModel.dart';
-import 'sharedPreferences.dart';
+import 'userPreferences.dart';
 import '../models/sickReason.dart';
 import 'authService.dart';
 import 'package:flutter/material.dart';

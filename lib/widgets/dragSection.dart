@@ -1,6 +1,9 @@
-import '../utilities/sharedPreferences.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import '../utilities/userPreferences.dart';
 import 'package:flutter/material.dart';
 import '../utilities/contactTracingUtilities.dart';
+import '../widgets/contactTracingAlertDialog.dart';
 
 class DragSection extends StatefulWidget {
   @override
@@ -9,6 +12,16 @@ class DragSection extends StatefulWidget {
 
 class _DragSectionState extends State<DragSection> {
   bool locationSharing = false;
+
+  @override
+  void initState() {
+    super.initState();
+      if(!UserPreferences.containsContactTracing()) {
+        SchedulerBinding.instance.addPostFrameCallback(
+                (_) => showContactTracingAlertDialog(context)
+        );
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +48,12 @@ class _DragSectionState extends State<DragSection> {
             children: [
               Material(
                 type: MaterialType.transparency,
-                child: FutureBuilder(
-                    future: UserPreferences.getContactTracingPreference(),
-                    builder: (context, snapshot) {
+                child: PreferenceBuilder<bool>(
+                    preference: UserPreferences.getContactTracingPreference(),
+                    builder: (BuildContext context, bool contactTracingPreference) {
                       return Ink(
                         decoration: BoxDecoration(
-                          color: snapshot.data ?? false
+                          color: contactTracingPreference ?? false
                               ? Theme.of(context).primaryColor
                               : Colors.grey[300],
                           shape: BoxShape.circle,
@@ -50,13 +63,13 @@ class _DragSectionState extends State<DragSection> {
                           splashColor: Colors.grey,
                           onTap: () async {
                             await ContactTracingUtilities.toggleContactTracing(
-                                context, !snapshot.data);
+                                context, !contactTracingPreference);
                             setState(() {});
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Icon(Icons.bluetooth_audio_rounded,
-                                color: (snapshot.data ?? false)
+                                color: (contactTracingPreference ?? false)
                                     ? Colors.white
                                     : Colors.grey,
                                 size: 30),
