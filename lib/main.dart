@@ -1,5 +1,7 @@
-import 'dart:async';
+import 'pages/interactions/interactions.dart';
+import 'pages/test_result/testResult.dart';
 import 'utilities/userPreferences.dart';
+import 'widgets/covidHotspotMap.dart';
 import 'widgets/dragSection.dart';
 import 'widgets/pageButton.dart';
 import 'utilities/contactTracingUtilities.dart';
@@ -7,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'pages/symptoms/symptomsSelection.dart';
 
 void main() async {
@@ -45,33 +46,43 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final Completer<GoogleMapController> _controller = Completer();
-
-  static const CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Walkdown',
-          style: Theme.of(context)
-              .textTheme
-              .headline6
-              .copyWith(color: Colors.white),
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'Walkdown',
+      //     style: Theme.of(context)
+      //         .textTheme
+      //         .headline6
+      //         .copyWith(color: Colors.white),
+      //   ),
+      // ),
       body: Stack(
         children: [
-          GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
+          CovidHotspotMap(),
+          Align(
+            alignment: const Alignment(0, -0.85),
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width - 10,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.elliptical(50, 50)),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3)
+                  )
+                ]
+              ),
+              child: const Align(
+                alignment: Alignment(-0.85, 0),
+                  child: Text('Go somewhere', style: TextStyle(color: Colors.blueGrey),)
+              ),
+            ),
           ),
           SnappingSheet(
             sheetBelow: SnappingSheetContent(
@@ -91,8 +102,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     PageButton(
                       icon: Icons.input_rounded,
-                      pageName: 'Enter Test Result',
-                      onPress: () {}
+                      pageName: 'I am positive for COVID-19',
+                      onPress: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => TestResult()));
+                      }
+                    ),
+                    PageButton(
+                      icon: Icons.list_alt_rounded,
+                      pageName: 'View Interactions',
+                      onPress: () {
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Interactions()));
+                      },
                     )
                   ],
                 ),

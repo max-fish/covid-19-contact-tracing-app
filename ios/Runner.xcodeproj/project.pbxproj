@@ -17,6 +17,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		944885DF25C3CFE700E0D863 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9480D86925BD12B800F19AA2 /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 24E61CEB88846F2BC249F4488CBD1013;
+			remoteInfo = location;
+		};
 		9480D88125BD12B800F19AA2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9480D86925BD12B800F19AA2 /* Pods.xcodeproj */;
@@ -182,6 +189,7 @@
 				9480D88E25BD12B800F19AA2 /* GoogleDataTransport.framework */,
 				9480D89025BD12B800F19AA2 /* GoogleUtilities.framework */,
 				9480D89225BD12B800F19AA2 /* GTMSessionFetcher.framework */,
+				944885E025C3CFE700E0D863 /* location.framework */,
 				9480D89425BD12B800F19AA2 /* nanopb.framework */,
 				9480D89625BD12B800F19AA2 /* Pods_Runner.framework */,
 				9480D89825BD12B800F19AA2 /* FBLPromises.framework */,
@@ -314,6 +322,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		944885E025C3CFE700E0D863 /* location.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = location.framework;
+			remoteRef = 944885DF25C3CFE700E0D863 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		9480D88225BD12B800F19AA2 /* firebase_auth.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -474,7 +489,7 @@
 		};
 		C05A08B70CEAB49B3040B952 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -484,7 +499,7 @@
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
