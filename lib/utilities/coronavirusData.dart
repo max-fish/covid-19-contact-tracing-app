@@ -26,11 +26,20 @@ class CoronavirusData {
     }
   }
 
-  static Future<http.Response> getLowerTierData() {
+  static Future<List<CoronavirusDataModel>> getLowerTierData() async {
     final String date = DateUtils.currentYearMonthDay;
-    return http.get('https://api.coronavirus.data.gove.uk/v1/data?', headers: <String, String>{
-      'filters': 'areaType=ltla;date=${date}',
-      'structure': '{"date": "date", "areaName": "areaName", "newCases": "newCasesByPublishDate"}'
-    });
+
+    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=ltla;date=${date}&structure={"date": "date", "areaName": "areaName", "newCases": "newCasesByPublishDate"}');
+
+    if(response.statusCode == 200) {
+      final String covidCasesString = response.body;
+      final covidCasesJson = jsonDecode(covidCasesString);
+      final covidCasesList = covidCasesJson['data'] as List;
+      final List<CoronavirusDataModel> covidModels = covidCasesList.map((element) => CoronavirusDataModel.fromJson(element)).toList();
+      return covidModels;
+    }
+    else {
+      throw Exception('Failed to load ltla COVID data');
+    }
   }
 }

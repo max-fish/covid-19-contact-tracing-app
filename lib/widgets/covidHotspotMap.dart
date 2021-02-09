@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import '../utilities/covidHotspotIconGenerator.dart';
 import '../utilities/assetUtilities.dart';
 import '../models/coronavirusDataModel.dart';
 import 'package:flutter/material.dart';
@@ -17,36 +18,43 @@ class CovidHotspotMap extends StatefulWidget {
 }
 
 class _CovidHotspotMapState extends State<CovidHotspotMap> {
+  BitmapDescriptor icon;
 
-  Future<List<CoronavirusDataModel>> covidData;
+  List<CoronavirusDataModel> covidData;
 
   Future<Map<String, dynamic>> coordinates;
 
-  final Set<Circle> _circles = HashSet<Circle>();
+  final Set<Marker> _markers = HashSet<Marker>();
 
   final Completer<GoogleMapController> _controller = Completer();
 
-  int _circleIdCounter = 1;
+  int _markerIdCounter = 1;
 
   static const CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(51.5074, 0.1278),
-    zoom: 14.4746,
+    zoom: 11,
   );
 
   @override
   void initState() {
     super.initState();
-    CoronavirusData.getUpperTierData().then((covidData) {
-      AssetUtils.loadLocaAuthorityCoordinates().then((nameToCoordinates) {
-        covidData.forEach((covidDataInArea) {
-          final String areaName = covidDataInArea.areaName;
-          print(areaName);
-          final coordinates = nameToCoordinates[areaName];
-          if(coordinates != null) {
-            _setCircle(LatLng(coordinates['lat'], coordinates['long']), covidDataInArea.newCases);
-          }
+    CoronavirusData.getUpperTierData().then((upperTierCovidData) {
+      CoronavirusData.getLowerTierData().then((lowerTierCovidData) {
+        AssetUtils.loadLocaAuthorityCoordinates().then((nameToCoordinates) {
+          final List<CoronavirusDataModel> allTierCovidData = [
+            ...upperTierCovidData,
+            ...lowerTierCovidData
+          ];
+          covidData = allTierCovidData;
+          allTierCovidData.forEach((covidDataInArea) {
+            final String areaName = covidDataInArea.areaName;
+            final coordinates = nameToCoordinates[areaName];
+            if (coordinates != null && covidDataInArea.newCases != 0) {
+              _setMarker(LatLng(coordinates['lat'], coordinates['long']),
+                  covidDataInArea);
+            }
+          });
         });
-        refreshWidget();
       });
     });
   }
@@ -55,17 +63,18 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
     setState(() {});
   }
 
-  void _setCircle(LatLng point, int cases) {
-    final _circleIdValue = 'circle_id_$_circleIdCounter';
-    _circleIdCounter++;
-    _circles.add(Circle(
-      circleId: CircleId(_circleIdValue),
-      center: point,
-      radius: 25.0 * cases,
-      fillColor: Colors.orange.withOpacity(0.5),
-      strokeWidth: 1,
-      strokeColor: Colors.orange,
-    ));
+  void _setMarker(LatLng point, CoronavirusDataModel covidData) {
+    final _markerIdValue = 'marker_id_$_markerIdCounter';
+    _markerIdCounter++;
+    generateCovidHotspotIcon(covidData.newCases * 2.0).then((hotspotIcon) {
+      setState(() {
+        _markers.add(Marker(
+          markerId: MarkerId(_markerIdValue),
+          icon: hotspotIcon,
+          position: point,
+        ));
+      });
+    });
   }
 
   @override
@@ -76,7 +85,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
       },
-      circles: _circles,
+      markers: _markers,
     );
   }
 }
