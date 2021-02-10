@@ -18,13 +18,12 @@ class CovidHotspotMap extends StatefulWidget {
 }
 
 class _CovidHotspotMapState extends State<CovidHotspotMap> {
-  BitmapDescriptor icon;
 
   List<CoronavirusDataModel> covidData;
 
   Future<Map<String, dynamic>> coordinates;
 
-  final Set<Marker> _markers = HashSet<Marker>();
+  Set<Marker> _markers;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -35,57 +34,54 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
     zoom: 11,
   );
 
-  @override
-  void initState() {
-    super.initState();
-    CoronavirusData.getUpperTierData().then((upperTierCovidData) {
-      CoronavirusData.getLowerTierData().then((lowerTierCovidData) {
-        AssetUtils.loadLocaAuthorityCoordinates().then((nameToCoordinates) {
-          final List<CoronavirusDataModel> allTierCovidData = [
-            ...upperTierCovidData,
-            ...lowerTierCovidData
-          ];
-          covidData = allTierCovidData;
-          allTierCovidData.forEach((covidDataInArea) {
-            final String areaName = covidDataInArea.areaName;
-            final coordinates = nameToCoordinates[areaName];
-            if (coordinates != null && covidDataInArea.newCases != 0) {
-              _setMarker(LatLng(coordinates['lat'], coordinates['long']),
-                  covidDataInArea);
-            }
-          });
-        });
-      });
-    });
-  }
-
-  void refreshWidget() {
-    setState(() {});
-  }
-
-  void _setMarker(LatLng point, CoronavirusDataModel covidData) {
-    final _markerIdValue = 'marker_id_$_markerIdCounter';
-    _markerIdCounter++;
-    generateCovidHotspotIcon(covidData.newCases * 2.0).then((hotspotIcon) {
-      setState(() {
-        _markers.add(Marker(
-          markerId: MarkerId(_markerIdValue),
-          icon: hotspotIcon,
-          position: point,
-        ));
-      });
-    });
+  Future<Set<Marker>> _setMarkers() async {
+    final Set<Marker> markers = HashSet<Marker>();
+    final List<CoronavirusDataModel> upperTierCovidData =
+    await CoronavirusData.getUpperTierData();
+    final List<CoronavirusDataModel> lowerTierCovidData =
+    await CoronavirusData.getLowerTierData();
+    final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
+    final List<CoronavirusDataModel> allTierCovidData = [
+      ...upperTierCovidData,
+      ...lowerTierCovidData
+    ];
+    covidData = allTierCovidData;
+    for (CoronavirusDataModel covidDataInArea in allTierCovidData) {
+      final String areaName = covidDataInArea.areaName;
+      final coordinates = nameToCoordinates[areaName];
+      if (coordinates != null && covidDataInArea.newCases != 0) {
+        final _markerIdValue = 'marker_id_$_markerIdCounter';
+        _markerIdCounter++;
+        final BitmapDescriptor hotspotIcon = await generateCovidHotspotIcon(covidDataInArea.newCases * 2.0);
+          markers.add(Marker(
+            markerId: MarkerId(_markerIdValue),
+            icon: hotspotIcon,
+            position: LatLng(coordinates['lat'], coordinates['long']),
+          ));
+      }
+    }
+    return markers;
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      mapType: MapType.normal,
-      initialCameraPosition: _kGooglePlex,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      markers: _markers,
+    return FutureBuilder(
+      future: _setMarkers(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          _markers = snapshot.data;
+          print(snapshot.data);
+          return GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _kGooglePlex,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              markers: snapshot.data);
+        } else {
+          return const CircularProgressIndicator();
+        }
+      }
     );
   }
 }
