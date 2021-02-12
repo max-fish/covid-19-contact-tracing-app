@@ -10,6 +10,8 @@ import GoogleMaps
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
     
+    let messageManager = GNSMessageManager(apiKey: "AIzaSyAhon76ezsL_Y_eI9Ddodr5jg8x-TjfvBw")
+    
     GMSServices.provideAPIKey("AIzaSyBEg5Tu1h46jO7sStSmdGwwuBMZO5PSz48")
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
