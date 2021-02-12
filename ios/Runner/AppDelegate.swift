@@ -8,6 +8,15 @@ import GoogleMaps
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    
+    let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
+    
+        let nearbyMessageChannel = FlutterMethodChannel(name: "nearby-message-api", binaryMessenger: controller.binaryMessenger)
+    
+    nearbyMessageChannel.setMethodCallHandler({
+          (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+        })
+    
     GeneratedPluginRegistrant.register(with: self)
     
     let messageManager = GNSMessageManager(apiKey: "AIzaSyAhon76ezsL_Y_eI9Ddodr5jg8x-TjfvBw")
