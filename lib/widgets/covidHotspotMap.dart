@@ -1,5 +1,8 @@
 import 'dart:async';
-import 'dart:collection';
+import 'package:flutter/scheduler.dart';
+
+import '../models/covidMarkerModel.dart';
+import 'areaDescriptionTiles.dart';
 import '../utilities/covidHotspotIconGenerator.dart';
 import '../utilities/assetUtilities.dart';
 import '../models/coronavirusDataModel.dart';
@@ -18,12 +21,17 @@ class CovidHotspotMap extends StatefulWidget {
 }
 
 class _CovidHotspotMapState extends State<CovidHotspotMap> {
+  final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
 
-  List<CoronavirusDataModel> covidData;
+  Widget areaDescriptionTiles;
+
+  PageController pageController = PageController();
 
   Future<Map<String, dynamic>> coordinates;
 
-  Set<Marker> _markers;
+  final Set<Marker> _markers = Set<Marker>();
+
+  GoogleMapController googleMapController;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -34,54 +42,81 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
     zoom: 11,
   );
 
-  Future<Set<Marker>> _setMarkers() async {
-    final Set<Marker> markers = HashSet<Marker>();
+  Future<void> _getCovidData() async {
     final List<CoronavirusDataModel> upperTierCovidData =
-    await CoronavirusData.getUpperTierData();
+        await CoronavirusData.getUpperTierData();
     final List<CoronavirusDataModel> lowerTierCovidData =
-    await CoronavirusData.getLowerTierData();
+        await CoronavirusData.getLowerTierData();
     final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
     final List<CoronavirusDataModel> allTierCovidData = [
       ...upperTierCovidData,
       ...lowerTierCovidData
     ];
-    covidData = allTierCovidData;
     for (CoronavirusDataModel covidDataInArea in allTierCovidData) {
       final String areaName = covidDataInArea.areaName;
       final coordinates = nameToCoordinates[areaName];
       if (coordinates != null && covidDataInArea.newCases != 0) {
-        final _markerIdValue = 'marker_id_$_markerIdCounter';
-        _markerIdCounter++;
-        final BitmapDescriptor hotspotIcon = await generateCovidHotspotIcon(covidDataInArea.newCases * 2.0);
-          markers.add(Marker(
-            markerId: MarkerId(_markerIdValue),
-            icon: hotspotIcon,
-            position: LatLng(coordinates['lat'], coordinates['long']),
-          ));
+        covidMarkerData.add(CovidMarkerModel(
+            areaName: areaName,
+            newCases: covidDataInArea.newCases,
+            latitude: coordinates['lat'],
+            longitude: coordinates['long']));
       }
     }
-    return markers;
+  }
+
+  Future<void> _setMarkers(BuildContext buildContext) async {
+    areaDescriptionTiles = AreaDescriptionTiles(
+        covidData: covidMarkerData,
+        pageController: pageController,
+        googleMapController: googleMapController);
+    for (CovidMarkerModel covidMarkerModel in covidMarkerData) {
+      final _markerIdValue = 'marker_id_$_markerIdCounter';
+      _markerIdCounter++;
+      final BitmapDescriptor hotspotIcon =
+          await generateCovidHotspotIcon(covidMarkerModel.newCases * 2.0);
+      _markers.add(Marker(
+          markerId: MarkerId(_markerIdValue),
+          icon: hotspotIcon,
+          position:
+              LatLng(covidMarkerModel.latitude, covidMarkerModel.longitude),
+          onTap: () async {
+            showBottomSheet(
+                context: buildContext,
+                builder: (BuildContext context) {
+                  return areaDescriptionTiles;
+                });
+            await Future.delayed(const Duration(milliseconds: 100));
+            pageController
+                .jumpToPage(covidMarkerData.indexOf(covidMarkerModel));
+          }));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _setMarkers(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          _markers = snapshot.data;
-          print(snapshot.data);
-          return GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _kGooglePlex,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              markers: snapshot.data);
-        } else {
-          return const CircularProgressIndicator();
-        }
-      }
-    );
+        future: _getCovidData(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _kGooglePlex,
+                onMapCreated: (GoogleMapController controller) async {
+                    googleMapController = controller;
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        child:
+                        const Center(child: CircularProgressIndicator()));
+                    await _setMarkers(context);
+                    Navigator.pop(context);
+                    _controller.complete(controller);
+                },
+                markers: _markers);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 }
