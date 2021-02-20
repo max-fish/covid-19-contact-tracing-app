@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter/scheduler.dart';
-
 import '../models/covidMarkerModel.dart';
 import 'areaDescriptionTiles.dart';
 import '../utilities/covidHotspotIconGenerator.dart';
@@ -24,8 +22,6 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
   final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
 
   Widget areaDescriptionTiles;
-
-  PageController pageController = PageController();
 
   Future<Map<String, dynamic>> coordinates;
 
@@ -71,6 +67,8 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
       _markerIdCounter++;
       final BitmapDescriptor hotspotIcon =
           await generateCovidHotspotIcon(covidMarkerModel.newCases * 2.0);
+      final PageController pageController = PageController(
+          initialPage: covidMarkerData.indexOf(covidMarkerModel));
       _markers.add(Marker(
           markerId: MarkerId(_markerIdValue),
           icon: hotspotIcon,
@@ -85,9 +83,6 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                       pageController: pageController,
                       googleMapController: googleMapController);
                 });
-            await Future.delayed(const Duration(milliseconds: 100));
-            pageController
-                .jumpToPage(covidMarkerData.indexOf(covidMarkerModel));
           }));
     }
   }
@@ -102,18 +97,24 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                 mapType: MapType.normal,
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) async {
-                    googleMapController = controller;
-                    if(!_controller.isCompleted) {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          child:
-                          const Center(child: CircularProgressIndicator()));
-                      await _setMarkers(context);
-                      Navigator.pop(context);
-                      setState(() {});
-                      _controller.complete(controller);
-                    }
+                  googleMapController = controller;
+                  if (!_controller.isCompleted) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return Container(
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: const Center(
+                                child: CircularProgressIndicator()));
+                        }
+                    );
+                    await _setMarkers(context);
+                    Navigator.pop(context);
+                    setState(() {});
+                    _controller.complete(controller);
+                  }
                 },
                 markers: _markers);
           } else {
