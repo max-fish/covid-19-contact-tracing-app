@@ -66,10 +66,6 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
   }
 
   Future<void> _setMarkers(BuildContext buildContext) async {
-    areaDescriptionTiles = AreaDescriptionTiles(
-        covidData: covidMarkerData,
-        pageController: pageController,
-        googleMapController: googleMapController);
     for (CovidMarkerModel covidMarkerModel in covidMarkerData) {
       final _markerIdValue = 'marker_id_$_markerIdCounter';
       _markerIdCounter++;
@@ -84,7 +80,10 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
             showBottomSheet(
                 context: buildContext,
                 builder: (BuildContext context) {
-                  return areaDescriptionTiles;
+                  return AreaDescriptionTiles(
+                      covidData: covidMarkerData,
+                      pageController: pageController,
+                      googleMapController: googleMapController);
                 });
             await Future.delayed(const Duration(milliseconds: 100));
             pageController
@@ -104,14 +103,17 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                 initialCameraPosition: _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) async {
                     googleMapController = controller;
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        child:
-                        const Center(child: CircularProgressIndicator()));
-                    await _setMarkers(context);
-                    Navigator.pop(context);
-                    _controller.complete(controller);
+                    if(!_controller.isCompleted) {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          child:
+                          const Center(child: CircularProgressIndicator()));
+                      await _setMarkers(context);
+                      Navigator.pop(context);
+                      setState(() {});
+                      _controller.complete(controller);
+                    }
                 },
                 markers: _markers);
           } else {
