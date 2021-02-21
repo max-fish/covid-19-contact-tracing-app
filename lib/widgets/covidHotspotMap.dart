@@ -72,7 +72,17 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return const Center(child: CircularProgressIndicator());
+                  return AlertDialog(
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 10),
+                        const Text('Adding hotspots...')
+                      ])
+                  );
                 });
             await _setMarkers(context);
             Navigator.pop(context);

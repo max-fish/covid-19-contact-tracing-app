@@ -179,7 +179,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(height: 10),
+                const Text('Getting COVID data...')
+              ],
+            ));
           }
         },
       ),
