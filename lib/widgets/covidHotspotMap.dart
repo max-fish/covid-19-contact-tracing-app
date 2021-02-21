@@ -17,9 +17,6 @@ class CovidHotspotMap extends StatefulWidget {
 }
 
 class _CovidHotspotMapState extends State<CovidHotspotMap> {
-  Widget areaDescriptionTiles;
-
-  Future<Map<String, dynamic>> coordinates;
 
   final Set<Marker> _markers = Set<Marker>();
 
