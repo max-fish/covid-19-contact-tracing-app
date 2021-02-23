@@ -10,14 +10,31 @@ class CoronavirusData {
     });
   }
 
-  static Future<List<CoronavirusDataModel>> getUpperTierData() async {
-    final String date = DateUtils.currentYearMonthDay;
-    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=utla;date=${date}&structure={"date": "date", "areaName": "areaName", "newCases": "newCasesByPublishDate"}');
+  static Future<List<CoronavirusDataModel>> getAllTierCovidData() async {
+    final List<CoronavirusDataModel> upperTierCovidData = await _getTierData(true);
+    final List<CoronavirusDataModel> lowerTierCovidData = await _getTierData(false);
+    return [...upperTierCovidData, ...lowerTierCovidData];
+  }
 
-    if(response.statusCode == 200) {
+  static Future<List<CoronavirusDataModel>> _getTierData(bool upperTierData) async {
+    final String date = DateUtils.currentYearMonthDay;
+    final String yesterdayDate = DateUtils.yesterdayYearMonthDay;
+
+    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${date}&structure={"date": "date", "areaName": "areaName", "areaCode": "areaCode", "newCases": "newCasesByPublishDate"}');
+    final yesterdayResponse = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${yesterdayDate}&structure={"date": "date", "areaName": "areaName", "areaCode": "areaCode", "newCases": "newCasesByPublishDate"}');
+
+    if(response.statusCode == 200 && yesterdayResponse.statusCode == 200) {
       final String covidCasesString = response.body;
+      final String yesterdayCovidCasesString = yesterdayResponse.body;
+
       final covidCasesJson = jsonDecode(covidCasesString);
+      final yesterdayCovidCasesJson = jsonDecode(yesterdayCovidCasesString);
+
       final covidCasesList = covidCasesJson['data'] as List;
+      final yesterdayCovidCasesList = yesterdayCovidCasesJson['data'] as List;
+
+      _combineCovidDataForTwoDays(covidCasesList, yesterdayCovidCasesList);
+
       final List<CoronavirusDataModel> covidModels = covidCasesList.map((element) => CoronavirusDataModel.fromJson(element)).toList();
       return covidModels;
     }
@@ -26,20 +43,9 @@ class CoronavirusData {
     }
   }
 
-  static Future<List<CoronavirusDataModel>> getLowerTierData() async {
-    final String date = DateUtils.currentYearMonthDay;
-
-    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=ltla;date=${date}&structure={"date": "date", "areaName": "areaName", "newCases": "newCasesByPublishDate"}');
-
-    if(response.statusCode == 200) {
-      final String covidCasesString = response.body;
-      final covidCasesJson = jsonDecode(covidCasesString);
-      final covidCasesList = covidCasesJson['data'] as List;
-      final List<CoronavirusDataModel> covidModels = covidCasesList.map((element) => CoronavirusDataModel.fromJson(element)).toList();
-      return covidModels;
-    }
-    else {
-      throw Exception('Failed to load ltla COVID data');
+  static _combineCovidDataForTwoDays(List todayCovidList, List yesterdayCovidList) {
+    for(int i = 0; i < todayCovidList.length; i++){
+      todayCovidList[i]['yesterdayCases'] = yesterdayCovidList[i]['newCases'];
     }
   }
 }

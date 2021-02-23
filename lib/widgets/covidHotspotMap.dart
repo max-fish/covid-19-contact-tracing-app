@@ -47,6 +47,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
           onTap: () async {
             showBottomSheet(
                 context: buildContext,
+                backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
                   return AreaDescriptionTiles(
                       covidData: widget.covidData,

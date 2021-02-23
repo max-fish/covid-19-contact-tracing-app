@@ -53,22 +53,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<CovidMarkerModel>> _getCovidData() async {
     final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
-    final List<CoronavirusDataModel> upperTierCovidData =
-    await CoronavirusData.getUpperTierData();
-    final List<CoronavirusDataModel> lowerTierCovidData =
-    await CoronavirusData.getLowerTierData();
     final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
-    final List<CoronavirusDataModel> allTierCovidData = [
-      ...upperTierCovidData,
-      ...lowerTierCovidData
-    ];
+    final List<CoronavirusDataModel> allTierCovidData = await CoronavirusData.getAllTierCovidData();
     for (CoronavirusDataModel covidDataInArea in allTierCovidData) {
       final String areaName = covidDataInArea.areaName;
       final coordinates = nameToCoordinates[areaName];
       if (coordinates != null && covidDataInArea.newCases != 0) {
         covidMarkerData.add(CovidMarkerModel(
             areaName: areaName,
+            areaCode: covidDataInArea.areaCode,
             newCases: covidDataInArea.newCases,
+            yesterdayCases: covidDataInArea.yesterdayCases,
             latitude: coordinates['lat'],
             longitude: coordinates['long']));
       }
