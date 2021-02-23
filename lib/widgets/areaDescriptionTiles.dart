@@ -26,7 +26,7 @@ class _AreaDescriptionTilesState extends State<AreaDescriptionTiles> {
               final LatLng newPos =
                   LatLng(markerModel.latitude, markerModel.longitude);
               widget.googleMapController
-                  .animateCamera(CameraUpdate.newLatLng(newPos));
+                  .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: newPos, zoom: 11)));
             },
             itemCount: widget.covidData.length,
             itemBuilder: (context, i) {
