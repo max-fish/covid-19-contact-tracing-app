@@ -36,7 +36,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
       final _markerIdValue = 'marker_id_$_markerIdCounter';
       _markerIdCounter++;
       final BitmapDescriptor hotspotIcon =
-          await generateCovidHotspotIcon(covidMarkerModel.newCases * 2.0);
+          await CovidHotspotIconGenerator.getCovidHotpostIcon(covidMarkerModel.newCases * 2);
       final PageController pageController = PageController(
           initialPage: widget.covidData.indexOf(covidMarkerModel));
       _markers.add(Marker(
