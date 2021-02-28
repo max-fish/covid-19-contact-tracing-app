@@ -1,3 +1,4 @@
+import '../../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
 class TestResult extends StatelessWidget {
@@ -33,6 +34,7 @@ class TestResult extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: const Text('Submit', style: TextStyle(color: Colors.white)),
                     onPressed: () {
+                      ContactTracingUtilities.publishPositiveTest(context);
                       Navigator.popUntil(context, (route) => route.isFirst);
                     }
                 ),
