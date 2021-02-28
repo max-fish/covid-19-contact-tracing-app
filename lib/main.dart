@@ -31,6 +31,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    ContactTracingUtilities.publishNotSick(context);
     return MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

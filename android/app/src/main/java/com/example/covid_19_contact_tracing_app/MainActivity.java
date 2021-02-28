@@ -20,7 +20,6 @@ import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
 import com.google.android.gms.tasks.Task;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,16 +71,15 @@ public class MainActivity extends FlutterActivity {
                 String messageString = new String(message.getContent(), StandardCharsets.UTF_8);
                 try {
                     JSONObject messageJson = new JSONObject(messageString);
-                    if(messageJson.getBoolean("sick")) {
+                    if (messageJson.getBoolean("sick")) {
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.this, NEARBY_CHANNEL_ID)
                                 .setSmallIcon(R.drawable.launch_background)
                                 .setContentTitle("COVID Proximity Alert")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH);
-                        if(messageJson.getString("reason").equals("SickReason.SYMPTOMS")) {
+                        if (messageJson.getString("reason").equals("SickReason.SYMPTOMS")) {
                             notificationBuilder
                                     .setContentText("Somebody near you has symptoms of Coronavirus");
-                        }
-                        else{
+                        } else {
                             notificationBuilder
                                     .setContentText("Somebody near you has tested positive for Coronavirus");
                         }
@@ -129,6 +127,7 @@ public class MainActivity extends FlutterActivity {
         if (contactTracePref) {
             Log.d(TAG, "subscribing");
             subscribe();
+            resumeCurrentMessage();
         }
     }
 
@@ -171,11 +170,23 @@ public class MainActivity extends FlutterActivity {
                 .addOnFailureListener(e -> result.error("PUBLISH", e.getMessage(), null));
     }
 
+    private void resumeCurrentMessage() {
+        if (mActiveMessage != null) {
+            Strategy publishStrategy = new Strategy.Builder()
+                    .setTtlSeconds(Strategy.TTL_SECONDS_MAX)
+                    .setDistanceType(Strategy.DISTANCE_TYPE_EARSHOT)
+                    .build();
+            PublishOptions publishOptions = new PublishOptions.Builder()
+                    .setStrategy(publishStrategy)
+                    .build();
+            Nearby.getMessagesClient(this).publish(mActiveMessage, publishOptions);
+        }
+    }
+
     private void unpublish() {
         Log.i(TAG, "Unpublishing.");
         if (mActiveMessage != null) {
             Nearby.getMessagesClient(this).unpublish(mActiveMessage);
-            mActiveMessage = null;
         }
     }
 
