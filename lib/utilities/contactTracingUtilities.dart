@@ -1,7 +1,9 @@
+import '../firebase/functionService.dart';
+import '../firebase/messagingService.dart';
+import '../firebase/firestoreService.dart';
 import '../models/messageModel.dart';
 import 'userPreferences.dart';
 import '../models/sickReason.dart';
-import 'authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,12 +17,8 @@ class ContactTracingUtilities {
   static Future<void> _receivedMessage(MethodCall call) async {
     if(call.method == 'messageReceived'){
       final Message receivedMessage = Message.fromJsonString(call.arguments('message'));
-      if(receivedMessage.sick){
-        //notify user
-      }
-      else{
-        //add to db
-      }
+      final currentTime = DateTime.now().toString();
+      await FirestoreService.addContact(receivedMessage.fcmToken, currentTime);
     }
   }
 
@@ -67,20 +65,22 @@ class ContactTracingUtilities {
   }
 
   static void publishNotSick(BuildContext context) {
-    final Message noSickMessage = Message(userId: AuthService.userId, sick: false);
+    final Message noSickMessage = Message(fcmToken: MessagingService.token, sick: false);
     _publish(context, noSickMessage);
   }
 
   static void publishSymptoms(BuildContext context, DateTime symptomsStartDate) {
     final Message symptomMessage =
-        Message(userId: AuthService.userId, sick: true, reason: SickReason.SYMPTOMS, symptomsStartDate: symptomsStartDate);
+        Message(fcmToken: MessagingService.token, sick: true, reason: SickReason.SYMPTOMS, symptomsStartDate: symptomsStartDate);
     _publish(context, symptomMessage);
+    _notifyContactedUsersHandler(SickReason.SYMPTOMS);
   }
 
   static void publishPositiveTest(BuildContext context) {
     final Message positiveTestMessage =
-        Message(userId: AuthService.userId, sick: true, reason: SickReason.POSITIVE_TEST);
+        Message(fcmToken: MessagingService.token, sick: true, reason: SickReason.POSITIVE_TEST);
     _publish(context, positiveTestMessage);
+    _notifyContactedUsersHandler(SickReason.POSITIVE_TEST);
   }
 
   static void _publish(BuildContext context, Message message) async {
@@ -90,6 +90,13 @@ class ContactTracingUtilities {
     } on PlatformException catch (e) {
       final snackBar = _makeSnackBar(context, e.message, Colors.red);
       Scaffold.of(context).showSnackBar(snackBar);
+    }
+  }
+
+  static void _notifyContactedUsersHandler(SickReason sickReason) async {
+    final bool hasContacts = await FirestoreService.hasContacts();
+    if(hasContacts) {
+      FunctionService.notifyContactedUsers(SickReason.SYMPTOMS);
     }
   }
 }

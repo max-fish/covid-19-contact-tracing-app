@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class Message {
-  final String userId;
+  final String fcmToken;
   final bool sick;
   final SickReason reason;
   final DateTime symptomsStartDate;
 
   Message(
-      {@required this.userId,
+      {@required this.fcmToken,
       @required this.sick,
       this.reason,
       this.symptomsStartDate});
@@ -17,7 +17,7 @@ class Message {
   factory Message.fromJsonString(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
     return Message(
-        userId: json['userId'],
+        fcmToken: json['fcmToken'],
         sick: json['sick'],
         reason: getReasonFromString(json['reason']),
         symptomsStartDate: json['symptomsStartDate'],
@@ -26,7 +26,7 @@ class Message {
 
   String toJsonString() {
     return jsonEncode({
-      'userId': userId,
+      'fcmToken': fcmToken,
       'sick': sick,
       'reason': reason.toString(),
       'symptomsStartDate': symptomsStartDate,

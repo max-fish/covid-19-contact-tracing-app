@@ -1,3 +1,5 @@
+import 'firebase/messagingService.dart';
+import 'firebase/firestoreService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
 import 'pages/interactions/interactions.dart';
@@ -21,10 +23,12 @@ void main() async {
   if (FirebaseAuth.instance.currentUser == null) {
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInAnonymously();
+    FirestoreService.addUser(userCredential.user.uid);
     print(userCredential.user.uid);
   }
   ContactTracingUtilities.init();
   await UserPreferences.init();
+  await MessagingService.init();
   runApp(MyApp());
 }
 
