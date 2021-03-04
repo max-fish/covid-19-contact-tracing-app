@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../firebase/functionService.dart';
 import '../firebase/messagingService.dart';
 import '../firebase/firestoreService.dart';
@@ -17,8 +19,9 @@ class ContactTracingUtilities {
   static Future<void> _receivedMessage(MethodCall call) async {
     if(call.method == 'messageReceived'){
       final Message receivedMessage = Message.fromJsonString(call.arguments('message'));
-      final currentTime = DateTime.now().toString();
-      await FirestoreService.addContact(receivedMessage.fcmToken, currentTime);
+      final currentTime = DateTime.now();
+      final dateFormat = DateFormat.yMMMd().add_Hm();
+      await FirestoreService.addContact(receivedMessage.fcmToken, dateFormat.format(currentTime));
     }
   }
 
