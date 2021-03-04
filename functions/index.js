@@ -15,17 +15,31 @@ admin.initializeApp();
 exports.notifyContactedUsers = functions.https.onCall((data, context) => {
   const userId = data["userId"];
   const typeOfSickness = data["sickness"];
-  const timeOfContact = data["timeOfContact"];
+
+  let statusMessage = "";
+
+  if (typeOfSickness === "SickReason.SYMPTOMS") {
+    statusMessage = "symptoms of COVID-19";
+  } else {
+    statusMessage = "has tested positive for COVID-19";
+  }
 
   const contactedUsersPromise = admin.firestore().collection("users").doc(userId).collection("ContactedUsers").get();
 
   contactedUsersPromise.then((contactedUsers) => {
-    const contactedUsersFcmTokens = contactedUsers.docs.map((contactedUser) => contactedUser.id);
-    const multicastMessage = {
-      data: {message: "Someone who you came into contact with on" + timeOfContact + "has" + typeOfSickness},
-      tokens: contactedUsersFcmTokens,
-    };
+    contactedUsers.forEach((contactedUser) => {
+      const message = {
+        notification: {
+          title: "Contact Tracing Alert",
+          body: "Someone who you came into contact with on " + contactedUser.data().timeOfContact + " has " + statusMessage,
+        },
+        android: {
+          priority: "high",
+        },
+        token: contactedUser.id,
+      };
 
-    admin.messaging().sendMulticast(multicastMessage).then((response) => console.log("all good")).catch((error) => console.log(error));
+      admin.messaging().send(message).then((response) => console.log("all good")).catch((error) => console.log(error));
+    });
   });
 });
