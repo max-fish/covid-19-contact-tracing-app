@@ -33,6 +33,12 @@ exports.notifyContactedUsers = functions.https.onCall((data, context) => {
           title: "Contact Tracing Alert",
           body: "Someone who you came into contact with on " + contactedUser.data().timeOfContact + " has " + statusMessage,
         },
+        data: {
+          title: "Contact Tracing Alert",
+          body: "Someone who you came into contact with on " + contactedUser.data().timeOfContact + " has " + statusMessage,
+          sickness: typeOfSickness,
+          click_action: "FLUTTER_NOTIFICATION_CLICK",
+        },
         android: {
           priority: "high",
         },

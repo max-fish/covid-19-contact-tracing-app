@@ -1,3 +1,4 @@
+import 'messageHandler.dart';
 import 'firebase/functionService.dart';
 import 'firebase/messagingService.dart';
 import 'firebase/firestoreService.dart';
@@ -39,13 +40,14 @@ class MyApp extends StatelessWidget {
     FunctionService.init(context);
     ContactTracingUtilities.publishNotSick(context);
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Walkdown',
+        initialRoute: '/',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage());
+        home: MessageHandler(child: MyHomePage()));
   }
 }
 
