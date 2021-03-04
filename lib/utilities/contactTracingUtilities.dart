@@ -105,7 +105,7 @@ class ContactTracingUtilities {
   static void _notifyContactedUsersHandler(SickReason sickReason) async {
     final bool hasContacts = await FirestoreService.hasContacts();
     if(hasContacts) {
-      FunctionService.notifyContactedUsers(SickReason.SYMPTOMS);
+      FunctionService.notifyContactedUsers(sickReason);
     }
   }
 }

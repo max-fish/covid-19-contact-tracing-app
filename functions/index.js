@@ -28,15 +28,18 @@ exports.notifyContactedUsers = functions.https.onCall((data, context) => {
 
   contactedUsersPromise.then((contactedUsers) => {
     contactedUsers.forEach((contactedUser) => {
+      const timeOfContact = contactedUser.data().timeOfContact;
+
       const message = {
         notification: {
           title: "Contact Tracing Alert",
-          body: "Someone who you came into contact with on " + contactedUser.data().timeOfContact + " has " + statusMessage,
+          body: "Someone who you came into contact with on " + timeOfContact + " has " + statusMessage,
         },
         data: {
           title: "Contact Tracing Alert",
-          body: "Someone who you came into contact with on " + contactedUser.data().timeOfContact + " has " + statusMessage,
+          body: "Someone who you came into contact with on " + timeOfContact + " has " + statusMessage,
           sickness: typeOfSickness,
+          timeOfContact: timeOfContact,
           click_action: "FLUTTER_NOTIFICATION_CLICK",
         },
         android: {

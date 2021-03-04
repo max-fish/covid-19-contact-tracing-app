@@ -1,7 +1,5 @@
 import 'firebase/functionService.dart';
-import 'models/sickReason.dart';
-import 'pages/click_action/clickActionPositiveTest.dart';
-import 'pages/click_action/clickActionSymptoms.dart';
+import 'pages/click_action/clickAction.dart';
 import 'package:flutter/material.dart';
 
 class MessageHandler extends StatefulWidget {
@@ -21,12 +19,7 @@ class _MessageHandlerState extends State<MessageHandler> {
     FunctionService.getInitialMessage().then((message) {
       if(message != null) {
           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
-            if(getReasonFromString(message.data['sickness']) == SickReason.SYMPTOMS) {
-              return ClickActionSymptoms();
-            }
-            else{
-              return ClickActionPositiveTest();
-            }
+              return ClickAction(reason: message.data['sickness'], timeOfContact: message.data['timeOfContact'],);
           }));
       }
     });
