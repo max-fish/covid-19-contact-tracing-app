@@ -1,3 +1,4 @@
+import 'firebase/functionService.dart';
 import 'firebase/messagingService.dart';
 import 'firebase/firestoreService.dart';
 import 'models/covidMarkerModel.dart';
@@ -35,6 +36,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FunctionService.init(context);
     ContactTracingUtilities.publishNotSick(context);
     return MaterialApp(
         title: 'Flutter Demo',

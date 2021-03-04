@@ -52,6 +52,9 @@ public class MainActivity extends FlutterActivity {
                         case "publish":
                             publish(call.argument("message"), result);
                             break;
+                        case "notifyContactTracing":
+                            notifyContactTracing(call.argument("message"));
+                            result.success(null);
                         default:
                             result.notImplemented();
                             break;
@@ -72,20 +75,14 @@ public class MainActivity extends FlutterActivity {
                 try {
                     JSONObject messageJson = new JSONObject(messageString);
                     if (messageJson.getBoolean("sick")) {
-                        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.this, NEARBY_CHANNEL_ID)
-                                .setSmallIcon(R.drawable.launch_background)
-                                .setContentTitle("COVID Proximity Alert")
-                                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                        String contentText;
                         if (messageJson.getString("reason").equals("SickReason.SYMPTOMS")) {
-                            notificationBuilder
-                                    .setContentText("Somebody near you has symptoms of Coronavirus");
+                            contentText = "Somebody near you has symptoms of Coronavirus";
                         } else {
-                            notificationBuilder
-                                    .setContentText("Somebody near you has tested positive for Coronavirus");
+                            contentText = "Somebody near you has tested positive for Coronavirus";
                         }
 
-                        NotificationManagerCompat manager = NotificationManagerCompat.from(MainActivity.this);
-                        manager.notify(NotificationID.getID(), notificationBuilder.build());
+                        displayNotification("COVID Proximity Alert", contentText);
 
                         methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
                             put("message", messageString);
@@ -115,6 +112,21 @@ public class MainActivity extends FlutterActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    private void notifyContactTracing(String contentText) {
+        displayNotification("Contact Tracing Alert", contentText);
+    }
+
+    private void displayNotification(String contentTitle, String contentText) {
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(MainActivity.this, NEARBY_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(contentText))
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
+        NotificationManagerCompat manager = NotificationManagerCompat.from(MainActivity.this);
+        manager.notify(NotificationID.getID(), notificationBuilder.build());
     }
 
     @Override

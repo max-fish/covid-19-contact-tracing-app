@@ -83,6 +83,15 @@ class ContactTracingUtilities {
     _notifyContactedUsersHandler(SickReason.POSITIVE_TEST);
   }
 
+  static void sendContactTracingAlert(BuildContext context, String message) async {
+    try {
+      await _platform.invokeMethod('notifyContactTracing', <String, String>{'message': message});
+    } on PlatformException catch (e) {
+      final snackBar = _makeSnackBar(context, e.message, Colors.red);
+      Scaffold.of(context).showSnackBar(snackBar);
+    }
+  }
+
   static void _publish(BuildContext context, Message message) async {
     try {
       await _platform.invokeMethod(
