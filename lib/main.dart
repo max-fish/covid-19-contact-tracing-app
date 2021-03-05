@@ -41,7 +41,6 @@ class MyApp extends StatelessWidget {
     ContactTracingUtilities.publishNotSick(context);
     return MaterialApp(
         title: 'Walkdown',
-        initialRoute: '/',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
