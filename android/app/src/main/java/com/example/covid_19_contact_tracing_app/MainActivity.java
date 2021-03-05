@@ -147,9 +147,11 @@ public class MainActivity extends FlutterActivity {
     private void toggleContactTracing(boolean shouldScan, MethodChannel.Result result) {
         if (shouldScan) {
             subscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
                     .addOnFailureListener(e -> result.error("SUBSCRIBE", e.getMessage(), null));
         } else {
             unsubscribe()
+                    .addOnSuccessListener(aVoid -> result.success(null))
                     .addOnFailureListener(e -> result.error("UNSUBSCRIBE", e.getMessage(), null));
         }
     }
