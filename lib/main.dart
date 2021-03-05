@@ -98,33 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
             return Stack(
               children: [
                 CovidHotspotMap(covidData: snapshot.data,),
-                Align(
-                  alignment: const Alignment(0, -0.85),
-                  child: Container(
-                    height: 50,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width - 10,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                        const BorderRadius.all(Radius.elliptical(50, 50)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: const Offset(0, 3))
-                        ]),
-                    child: const Align(
-                        alignment: Alignment(-0.85, 0),
-                        child: Text(
-                          'Go somewhere',
-                          style: TextStyle(color: Colors.blueGrey),
-                        )),
-                  ),
-                ),
                 SnappingSheet(
                   sheetBelow: SnappingSheetContent(
                     child: Container(

@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+import '../utilities/mapPlaces.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+
 import '../models/covidMarkerModel.dart';
 import 'areaDescriptionTiles.dart';
 import '../utilities/covidHotspotIconGenerator.dart';
@@ -60,6 +65,11 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
     }
   }
 
+  void showSearchedPlace(LatLng latLng) {
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: latLng, zoom: 11)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
@@ -109,7 +119,42 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                 ),
               ),
             )
-          : Container()
+          : Container(),
+      Align(
+          alignment: const Alignment(0, -0.85),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: const Offset(0, 3))
+                ]),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: PlacesAutocompleteField(
+                apiKey: Platform.isAndroid
+                    ? 'AIzaSyAFoRipVavXiM6xJauP0GmT9CodLLrvjcY'
+                    : 'AIzaSyBEg5Tu1h46jO7sStSmdGwwuBMZO5PSz48',
+                mode: Mode.overlay,
+                leading: const Icon(Icons.search, color: Colors.blueGrey),
+                hint: 'Go Somewhere',
+                components: [Component(Component.country, 'uk')],
+                onSelected: (Prediction p) async {
+                  final LatLng latLng = await MapPlaces.getCoordinates(p);
+                  showSearchedPlace(latLng);
+                },
+                inputDecoration: const InputDecoration(
+                    contentPadding: EdgeInsets.only(
+                        top: 18.5, bottom: 18.5, left: 0, right: 0),
+                    border: OutlineInputBorder(borderSide: BorderSide.none)),
+              ),
+            ),
+          )),
     ]);
   }
 }
