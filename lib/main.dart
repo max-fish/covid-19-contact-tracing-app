@@ -1,3 +1,7 @@
+import 'messageHandler.dart';
+import 'firebase/functionService.dart';
+import 'firebase/messagingService.dart';
+import 'firebase/firestoreService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
 import 'pages/interactions/interactions.dart';
@@ -21,25 +25,28 @@ void main() async {
   if (FirebaseAuth.instance.currentUser == null) {
     final UserCredential userCredential =
         await FirebaseAuth.instance.signInAnonymously();
+    FirestoreService.addUser(userCredential.user.uid);
     print(userCredential.user.uid);
   }
   ContactTracingUtilities.init();
   await UserPreferences.init();
+  await MessagingService.init();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FunctionService.init(context);
     ContactTracingUtilities.publishNotSick(context);
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Walkdown',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MyHomePage());
+        home: MessageHandler(child: MyHomePage()));
   }
 }
 

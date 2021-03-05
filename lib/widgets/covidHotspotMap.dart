@@ -17,6 +17,7 @@ class CovidHotspotMap extends StatefulWidget {
 }
 
 class _CovidHotspotMapState extends State<CovidHotspotMap> {
+  bool loading = true;
 
   final Set<Marker> _markers = Set<Marker>();
 
@@ -36,7 +37,8 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
       final _markerIdValue = 'marker_id_$_markerIdCounter';
       _markerIdCounter++;
       final BitmapDescriptor hotspotIcon =
-          await CovidHotspotIconGenerator.getCovidHotpostIcon(covidMarkerModel.newCases * 2);
+          await CovidHotspotIconGenerator.getCovidHotpostIcon(
+              covidMarkerModel.newCases * 2);
       final PageController pageController = PageController(
           initialPage: widget.covidData.indexOf(covidMarkerModel));
       _markers.add(Marker(
@@ -60,34 +62,54 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) async {
-          googleMapController = controller;
-          if (!_controller.isCompleted) {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+    return Stack(children: [
+      ColorFiltered(
+        colorFilter: ColorFilter.mode(
+            loading ? Colors.black.withOpacity(0.5) : Colors.transparent,
+            BlendMode.srcATop),
+        child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) async {
+              googleMapController = controller;
+              if (!_controller.isCompleted) {
+                await _setMarkers(context);
+                setState(() {
+                  loading = false;
+                });
+                _controller.complete(controller);
+              }
+            },
+            markers: _markers),
+      ),
+      loading
+          ? Align(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3))
+                    ]),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
                         const CircularProgressIndicator(),
                         const SizedBox(height: 10),
                         const Text('Adding hotspots...')
-                      ])
-                  );
-                });
-            await _setMarkers(context);
-            Navigator.pop(context);
-            setState(() {});
-            _controller.complete(controller);
-          }
-        },
-        markers: _markers);
+                      ]),
+                ),
+              ),
+            )
+          : Container()
+    ]);
   }
 }
