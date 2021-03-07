@@ -4,11 +4,6 @@ import 'dates.dart';
 import 'package:http/http.dart' as http;
 
 class CoronavirusData {
-  static Future<http.Response> getLocalDataFromAreaCode(String areaCode) {
-    return http.get('https://api.coronavirus.data.gov.uk/v1/data?', headers: <String, String>{
-      'filters': 'areaCode=${areaCode}'
-    });
-  }
 
   static Future<List<CoronavirusDataModel>> getAllTierCovidData() async {
     final List<CoronavirusDataModel> upperTierCovidData = await _getTierData(true);
@@ -17,11 +12,11 @@ class CoronavirusData {
   }
 
   static Future<List<CoronavirusDataModel>> _getTierData(bool upperTierData) async {
-    final String date = DateUtils.currentYearMonthDay;
     final String yesterdayDate = DateUtils.yesterdayYearMonthDay;
+    final String beforeYesterdayDate = DateUtils.dayBeforeYesterdayYearMonthDay;
 
-    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${date}&structure={"date": "date", "areaName": "areaName", "areaCode": "areaCode", "newCases": "newCasesByPublishDate"}');
-    final yesterdayResponse = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${yesterdayDate}&structure={"date": "date", "areaName": "areaName", "areaCode": "areaCode", "newCases": "newCasesByPublishDate"}');
+    final response = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${yesterdayDate}&structure={"date": "date", "areaName": "areaName", "areaCode": "areaCode", "newCases": "newCasesByPublishDate"}');
+    final yesterdayResponse = await http.get('https://api.coronavirus.data.gov.uk/v1/data?filters=areaType=${upperTierData ? 'utla' : 'ltla'};date=${beforeYesterdayDate}&structure={"newCases": "newCasesByPublishDate"}');
 
     if(response.statusCode == 200 && yesterdayResponse.statusCode == 200) {
       final String covidCasesString = response.body;
