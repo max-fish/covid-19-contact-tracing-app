@@ -205,7 +205,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
                 },
                 inputDecoration: const InputDecoration(
                     contentPadding: EdgeInsets.only(
-                        top: 18.5, bottom: 18.5, left: 0, right: 0),
+                        top: 18, bottom: 18, left: 0, right: 0),
                     border: OutlineInputBorder(borderSide: BorderSide.none)),
               ),
             ),
