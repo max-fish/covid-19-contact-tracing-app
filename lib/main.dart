@@ -1,3 +1,5 @@
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+
 import 'messageHandler.dart';
 import 'firebase/functionService.dart';
 import 'firebase/messagingService.dart';
@@ -105,26 +107,35 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: GridView.count(
                         crossAxisCount: 2,
                         children: [
-                          PageButton(
-                            icon: Icons.thermostat_rounded,
-                            pageName: 'Check Symptoms',
-                            onPress: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          SymptomsSelection()));
-                            },
-                          ),
-                          PageButton(
-                              icon: Icons.input_rounded,
-                              pageName: 'I am positive for COVID-19',
-                              onPress: () {
-                                Navigator.push(
+                          PreferenceBuilder<bool>(
+                            preference: UserPreferences.getContactTracingPreference(),
+                            builder: (BuildContext context, bool contactTracingPreference) {
+                              return PageButton(
+                              icon: Icons.thermostat_rounded,
+                              pageName: 'Check Symptoms',
+                              onPress: contactTracingPreference ?
+                                () => Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => TestResult()));
-                              }),
+                                        builder: (context) =>
+                                            SymptomsSelection())) : null
+                            );
+                            }
+                          ),
+                          PreferenceBuilder<bool>(
+                            preference: UserPreferences.getContactTracingPreference(),
+                            builder: (BuildContext context, bool contactTracingPreference) {
+                              return PageButton(
+                                icon: Icons.input_rounded,
+                                pageName: 'I am positive for COVID-19',
+                                onPress: contactTracingPreference ?
+                                  () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => TestResult())) : null
+                                );
+                            }
+                          ),
                           PageButton(
                             icon: Icons.list_alt_rounded,
                             pageName: 'View Interactions',

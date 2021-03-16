@@ -21,7 +21,7 @@ class PageButton extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 40, color: Colors.deepOrangeAccent,),
+            Icon(icon, size: 40, color: onPress == null ? Colors.grey : Colors.deepOrangeAccent,),
             Text(pageName, style: Theme.of(context).textTheme.button,)
           ],
         ),
