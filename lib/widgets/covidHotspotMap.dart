@@ -96,6 +96,9 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
     }
     final Position currentPosition =
     await GeoLocator.determinePosition(context);
+    if(currentPosition == null) {
+      return;
+    }
     final PolylineResult route =
     await polylinePoints?.getRouteBetweenCoordinates(
       'AIzaSyDv9Hn32OA6ARqhVLPzJY9ZDPhlDxjLrVA',
