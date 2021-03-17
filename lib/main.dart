@@ -6,6 +6,7 @@ import 'firebase/messagingService.dart';
 import 'firebase/firestoreService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
+import 'pages/about_page/aboutPage.dart';
 import 'pages/interactions/interactions.dart';
 import 'pages/test_result/testResult.dart';
 import 'utilities/assetUtilities.dart';
@@ -145,7 +146,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                   MaterialPageRoute(
                                       builder: (context) => Interactions()));
                             },
-                          )
+                          ),
+                          PageButton(
+                            icon: Icons.info_outline_rounded,
+                            pageName: 'About this app',
+                            onPress: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AboutPage()));
+                            },
+                          ),
                         ],
                       ),
                     ),
