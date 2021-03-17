@@ -8,7 +8,7 @@ import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
 import 'pages/about_page/aboutPage.dart';
 import 'pages/interactions/interactions.dart';
-import 'pages/test_result/testResult.dart';
+import 'pages/positive_test/positiveTest.dart';
 import 'utilities/assetUtilities.dart';
 import 'utilities/coronavirusData.dart';
 import 'utilities/userPreferences.dart';
