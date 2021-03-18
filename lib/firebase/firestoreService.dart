@@ -5,10 +5,11 @@ class FirestoreService {
 
   static final CollectionReference _db = FirebaseFirestore.instance.collection('users');
 
-  static void addContact(String fcmToken, String timestamp) {
+  static void addContact(String fcmToken, String timestamp, String sickReason) {
     final String userId = AuthService.userId;
     _db.doc(userId).collection('ContactedUsers').doc(fcmToken).set({
       'timeOfContact': timestamp,
+      'reason': sickReason
     });
   }
 
@@ -22,5 +23,11 @@ class FirestoreService {
     final QuerySnapshot contactedUsers = await _db.doc(userId).collection('ContactedUsers').get();
     print(contactedUsers.size);
     return contactedUsers.size > 0;
+  }
+
+  static Stream<QuerySnapshot> getContactsStream() {
+    final String userId = AuthService.userId;
+    final Stream<QuerySnapshot> contactedUsersStream = _db.doc(userId).collection('ContactedUsers').snapshots();
+    return contactedUsersStream;
   }
 }
