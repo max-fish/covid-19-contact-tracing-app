@@ -1,3 +1,4 @@
+import 'pages/notification_information/notificationInformation.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 import 'messageHandler.dart';
@@ -145,6 +146,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Interactions()));
+                            },
+                          ),
+                          PageButton(
+                            icon: Icons.notifications_active_rounded,
+                            pageName: 'I got an exposure notification. What should I do?',
+                            onPress: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NotificationInformation()));
                             },
                           ),
                           PageButton(
