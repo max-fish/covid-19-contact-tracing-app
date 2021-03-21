@@ -11,7 +11,7 @@ class Message {
   Message(
       {@required this.fcmToken,
       @required this.sick,
-      this.reason,
+      this.reason = SickReason.NOT_SICK,
       this.symptomsStartDate});
 
   factory Message.fromJsonString(String jsonString) {
