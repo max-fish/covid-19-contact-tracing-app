@@ -3,7 +3,7 @@ import '../utilities/contactTracingUtilities.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/sickReason.dart';
-import '../utilities/authService.dart';
+import 'authService.dart';
 
 class FunctionService {
 
@@ -23,7 +23,8 @@ class FunctionService {
       'userId': AuthService.userId,
       'sickness': sickReason.toString(),
     };
-
+    print(AuthService.userId);
+    print('doing it');
     FirebaseFunctions.instance.httpsCallable('notifyContactedUsers').call(data);
   }
 }
