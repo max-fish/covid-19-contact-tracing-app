@@ -4,7 +4,6 @@ import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 import 'messageHandler.dart';
 import 'firebase/functionService.dart';
 import 'firebase/messagingService.dart';
-import 'firebase/firestoreService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
 import 'pages/about_page/aboutPage.dart';
@@ -22,16 +21,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'pages/symptoms/symptomsSelection.dart';
+import 'firebase/authService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  if (FirebaseAuth.instance.currentUser == null) {
-    final UserCredential userCredential =
-        await FirebaseAuth.instance.signInAnonymously();
-    FirestoreService.addUser(userCredential.user.uid);
-    print(userCredential.user.uid);
-  }
+  await AuthService.signInAnonIfNew();
+  print('userId' + FirebaseAuth.instance.currentUser.uid);
   ContactTracingUtilities.init();
   await UserPreferences.init();
   await MessagingService.init();
@@ -42,7 +38,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FunctionService.init(context);
-    ContactTracingUtilities.publishNotSick(context);
+    if(UserPreferences.getContactTracingPreference().getValue()){
+      ContactTracingUtilities.publishNotSick(context);
+    }
     return MaterialApp(
         title: 'Walkdown',
         theme: ThemeData(
@@ -86,15 +84,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Walkdown',
-      //     style: Theme.of(context)
-      //         .textTheme
-      //         .headline6
-      //         .copyWith(color: Colors.white),
-      //   ),
-      // ),
       body: FutureBuilder<List<CovidMarkerModel>>(
         future: _getCovidData(),
         builder: (BuildContext context, AsyncSnapshot<List<CovidMarkerModel>> snapshot) {
