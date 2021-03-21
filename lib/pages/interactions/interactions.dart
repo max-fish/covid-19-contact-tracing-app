@@ -28,8 +28,11 @@ class Interactions extends StatelessWidget {
                               String trailingText;
                               if (reason == 'SickReason.SYMPTOMS') {
                                 trailingText = 'Symptoms';
-                              } else {
+                              } else if(reason == 'SickReason.POSITIVE_TEST') {
                                 trailingText = 'Positive Test';
+                              }
+                              else{
+                                trailingText = 'Not Sick';
                               }
                               return Card(
                                 child: ListTile(
