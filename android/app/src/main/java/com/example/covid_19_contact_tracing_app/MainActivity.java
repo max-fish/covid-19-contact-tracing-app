@@ -55,6 +55,7 @@ public class MainActivity extends FlutterActivity {
                         case "notifyContactTracing":
                             notifyContactTracing(call.argument("message"));
                             result.success(null);
+                            break;
                         default:
                             result.notImplemented();
                             break;
@@ -83,11 +84,11 @@ public class MainActivity extends FlutterActivity {
                         }
 
                         displayNotification("COVID Proximity Alert", contentText);
-
-                        methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
-                            put("message", messageString);
-                        }});
                     }
+
+                    methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
+                        put("message", messageString);
+                    }});
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
