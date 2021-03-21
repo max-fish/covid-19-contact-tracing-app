@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../utilities/authService.dart';
+import 'authService.dart';
 
 class FirestoreService {
 
