@@ -16,7 +16,6 @@ import 'widgets/covidHotspotMap.dart';
 import 'widgets/dragSection.dart';
 import 'widgets/pageButton.dart';
 import 'utilities/contactTracingUtilities.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
@@ -27,7 +26,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await AuthService.signInAnonIfNew();
-  print('userId' + FirebaseAuth.instance.currentUser.uid);
   ContactTracingUtilities.init();
   await UserPreferences.init();
   await MessagingService.init();
@@ -43,6 +41,7 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp(
         title: 'Walkdown',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           textTheme: const TextTheme(bodyText2: TextStyle(fontSize: 16.0)),
