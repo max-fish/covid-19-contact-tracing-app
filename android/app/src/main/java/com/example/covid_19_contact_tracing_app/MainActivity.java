@@ -15,7 +15,6 @@ import androidx.core.app.NotificationManagerCompat;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
-import com.google.android.gms.nearby.messages.NearbyPermissions;
 import com.google.android.gms.nearby.messages.PublishOptions;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.nearby.messages.SubscribeOptions;
@@ -30,6 +29,10 @@ import java.util.HashMap;
 import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
+
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
 
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "nearby-message-api";
@@ -68,6 +71,10 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCenter.start(getApplication(), "0087a3d1-1804-417f-8387-e3601e173aaf",
+                Analytics.class, Crashes.class);
+
         createNotificationChannel();
         mMessageListener = new MessageListener() {
             @Override
