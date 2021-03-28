@@ -42,9 +42,9 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
 
   int _markerIdCounter = 1;
 
-  static const CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(51.5074, 0.1278),
-    zoom: 11,
+  static const CameraPosition _UK = const CameraPosition(
+    target: LatLng(54.65478120656813, -3.1891666855373746),
+    zoom: 5.7,
   );
 
   Future<void> _setMarkers(BuildContext buildContext) async {
@@ -138,7 +138,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
             BlendMode.srcATop),
         child: GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
+            initialCameraPosition: _UK,
             onMapCreated: (GoogleMapController controller) async {
               googleMapController = controller;
               if (!_controller.isCompleted) {

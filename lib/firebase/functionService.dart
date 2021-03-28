@@ -23,8 +23,6 @@ class FunctionService {
       'userId': AuthService.userId,
       'sickness': sickReason.toString(),
     };
-    print(AuthService.userId);
-    print('doing it');
     FirebaseFunctions.instance.httpsCallable('notifyContactedUsers').call(data);
   }
 }

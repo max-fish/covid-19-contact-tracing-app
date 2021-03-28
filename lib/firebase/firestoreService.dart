@@ -14,14 +14,12 @@ class FirestoreService {
   }
 
   static void addUser(String userId) async {
-    print('hi');
     await _db.doc(userId).set({});
   }
 
   static Future<bool> hasContacts() async {
     final String userId = AuthService.userId;
     final QuerySnapshot contactedUsers = await _db.doc(userId).collection('ContactedUsers').get();
-    print(contactedUsers.size);
     return contactedUsers.size > 0;
   }
 

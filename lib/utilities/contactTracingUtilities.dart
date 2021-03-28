@@ -18,7 +18,6 @@ class ContactTracingUtilities {
 
   static Future<void> _receivedMessage(MethodCall call) async {
     if(call.method == 'receivedMessage') {
-      print(call.arguments['message']);
       final Message receivedMessage = Message.fromJsonString(call.arguments['message']);
       final currentTime = DateTime.now();
       final dateFormat = DateFormat.yMMMd().add_Hm();
@@ -51,6 +50,9 @@ class ContactTracingUtilities {
     try {
       await _platform.invokeMethod(
           'toggleContactTracing', <String, bool>{'shouldTrace': shouldTrace});
+      if(shouldTrace) {
+        publishNotSick(context);
+      }
       UserPreferences.setContactTracingPreference(shouldTrace);
       if (shouldTrace) {
         final snackBar =
@@ -108,7 +110,6 @@ class ContactTracingUtilities {
 
   static void _notifyContactedUsersHandler(SickReason sickReason) async {
     final bool hasContacts = await FirestoreService.hasContacts();
-    print(hasContacts);
     if(hasContacts) {
       FunctionService.notifyContactedUsers(sickReason);
     }
