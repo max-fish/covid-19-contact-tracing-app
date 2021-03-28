@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FunctionService.init(context);
-    if(UserPreferences.getContactTracingPreference().getValue()){
+    if (UserPreferences.getContactTracingPreference().getValue()) {
       ContactTracingUtilities.publishNotSick(context);
     }
     return MaterialApp(
@@ -59,11 +59,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   Future<List<CovidMarkerModel>> _getCovidData() async {
     final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
     final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
-    final List<CoronavirusDataModel> allTierCovidData = await CoronavirusData.getAllTierCovidData();
+    final List<CoronavirusDataModel> allTierCovidData =
+        await CoronavirusData.getAllTierCovidData();
     for (CoronavirusDataModel covidDataInArea in allTierCovidData) {
       final String areaName = covidDataInArea.areaName;
       final coordinates = nameToCoordinates[areaName];
@@ -85,11 +85,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: FutureBuilder<List<CovidMarkerModel>>(
         future: _getCovidData(),
-        builder: (BuildContext context, AsyncSnapshot<List<CovidMarkerModel>> snapshot) {
-          if(snapshot.connectionState == ConnectionState.done) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<CovidMarkerModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
             return Stack(
               children: [
-                CovidHotspotMap(covidData: snapshot.data,),
+                Container(
+                    height: MediaQuery.of(context).size.height - 95,
+                    child: CovidHotspotMap(
+                      covidData: snapshot.data,
+                    )),
                 SnappingSheet(
                   sheetBelow: SnappingSheetContent(
                     child: Container(
@@ -98,34 +103,37 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisCount: 2,
                         children: [
                           PreferenceBuilder<bool>(
-                            preference: UserPreferences.getContactTracingPreference(),
-                            builder: (BuildContext context, bool contactTracingPreference) {
-                              return PageButton(
-                              icon: Icons.thermostat_rounded,
-                              pageName: 'Check Symptoms',
-                              onPress: contactTracingPreference ?
-                                () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            SymptomsSelection())) : null
-                            );
-                            }
-                          ),
+                              preference:
+                                  UserPreferences.getContactTracingPreference(),
+                              builder: (BuildContext context,
+                                  bool contactTracingPreference) {
+                                return PageButton(
+                                    icon: Icons.thermostat_rounded,
+                                    pageName: 'Check Symptoms',
+                                    onPress: contactTracingPreference
+                                        ? () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SymptomsSelection()))
+                                        : null);
+                              }),
                           PreferenceBuilder<bool>(
-                            preference: UserPreferences.getContactTracingPreference(),
-                            builder: (BuildContext context, bool contactTracingPreference) {
-                              return PageButton(
-                                icon: Icons.input_rounded,
-                                pageName: 'I am positive for COVID-19',
-                                onPress: contactTracingPreference ?
-                                  () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => TestResult())) : null
-                                );
-                            }
-                          ),
+                              preference:
+                                  UserPreferences.getContactTracingPreference(),
+                              builder: (BuildContext context,
+                                  bool contactTracingPreference) {
+                                return PageButton(
+                                    icon: Icons.input_rounded,
+                                    pageName: 'I am positive for COVID-19',
+                                    onPress: contactTracingPreference
+                                        ? () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TestResult()))
+                                        : null);
+                              }),
                           PageButton(
                             icon: Icons.list_alt_rounded,
                             pageName: 'View Interactions',
@@ -138,12 +146,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           PageButton(
                             icon: Icons.notifications_active_rounded,
-                            pageName: 'I got an exposure notification. What should I do?',
+                            pageName:
+                                'I got an exposure notification. What should I do?',
                             onPress: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => NotificationInformation()));
+                                      builder: (context) =>
+                                          NotificationInformation()));
                             },
                           ),
                           PageButton(
@@ -176,7 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             );
           } else {
-            return Center(child: Column(
+            return Center(
+                child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

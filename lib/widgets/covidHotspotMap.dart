@@ -137,6 +137,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
             loading ? Colors.black.withOpacity(0.5) : Colors.transparent,
             BlendMode.srcATop),
         child: GoogleMap(
+            zoomControlsEnabled: false,
             mapType: MapType.normal,
             initialCameraPosition: _UK,
             onMapCreated: (GoogleMapController controller) async {
