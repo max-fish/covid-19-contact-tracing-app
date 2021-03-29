@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSAppTransportSecurity</key>
+	<dict/>
+	<key>Allows Local Networking</key>
+	<string>YES</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>The microphone listens for anonymous tokens from nearby devices.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>An anonymous token is advertised via Bluetooth to discover nearby devices.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
 	<key>CFBundleDevelopmentRegion</key>
