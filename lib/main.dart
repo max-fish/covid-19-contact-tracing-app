@@ -1,27 +1,19 @@
-import 'pages/notification_information/notificationInformation.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
-
+import 'widgets/contactTracingBottomSheet.dart';
 import 'messageHandler.dart';
 import 'firebase/functionService.dart';
 import 'firebase/messagingService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
-import 'pages/about_page/aboutPage.dart';
-import 'pages/interactions/interactions.dart';
-import 'pages/positive_test/positiveTest.dart';
 import 'utilities/assetUtilities.dart';
 import 'utilities/coronavirusData.dart';
 import 'utilities/userPreferences.dart';
 import 'widgets/covidHotspotMap.dart';
-import 'widgets/dragSection.dart';
-import 'widgets/pageButton.dart';
 import 'utilities/contactTracingUtilities.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:snapping_sheet/snapping_sheet.dart';
-import 'pages/symptoms/symptomsSelection.dart';
 import 'firebase/authService.dart';
 
+//main entry point for app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -95,94 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: CovidHotspotMap(
                       covidData: snapshot.data,
                     )),
-                SnappingSheet(
-                  sheetBelow: SnappingSheetContent(
-                    child: Container(
-                      color: Colors.white,
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        children: [
-                          PreferenceBuilder<bool>(
-                              preference:
-                                  UserPreferences.getContactTracingPreference(),
-                              builder: (BuildContext context,
-                                  bool contactTracingPreference) {
-                                return PageButton(
-                                    icon: Icons.thermostat_rounded,
-                                    pageName: 'Check Symptoms',
-                                    onPress: contactTracingPreference
-                                        ? () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SymptomsSelection()))
-                                        : null);
-                              }),
-                          PreferenceBuilder<bool>(
-                              preference:
-                                  UserPreferences.getContactTracingPreference(),
-                              builder: (BuildContext context,
-                                  bool contactTracingPreference) {
-                                return PageButton(
-                                    icon: Icons.input_rounded,
-                                    pageName: 'I am positive for COVID-19',
-                                    onPress: contactTracingPreference
-                                        ? () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TestResult()))
-                                        : null);
-                              }),
-                          PageButton(
-                            icon: Icons.list_alt_rounded,
-                            pageName: 'View Interactions',
-                            onPress: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Interactions()));
-                            },
-                          ),
-                          PageButton(
-                            icon: Icons.notifications_active_rounded,
-                            pageName:
-                                'I got an exposure notification. What should I do?',
-                            onPress: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NotificationInformation()));
-                            },
-                          ),
-                          PageButton(
-                            icon: Icons.info_outline_rounded,
-                            pageName: 'About this app',
-                            onPress: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AboutPage()));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    heightBehavior: const SnappingSheetHeight.fixed(),
-                  ),
-                  grabbing: DragSection(),
-                  grabbingHeight: 100,
-                  initSnapPosition: const SnapPosition(positionFactor: 0),
-                  snapPositions: [
-                    const SnapPosition(
-                        positionFactor: 0,
-                        snappingDuration: Duration(milliseconds: 100)),
-                    const SnapPosition(
-                        positionFactor: 0.5,
-                        snappingDuration: Duration(milliseconds: 100)),
-                  ],
-                ),
+                ContactTracingBottomSheet()
               ],
             );
           } else {

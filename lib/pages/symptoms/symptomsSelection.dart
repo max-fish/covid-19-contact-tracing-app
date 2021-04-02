@@ -1,4 +1,4 @@
-import '../../widgets/SymptomCard.dart';
+import '../../widgets/symptomCard.dart';
 import 'package:flutter/material.dart';
 
 import 'confirmSymptoms.dart';
