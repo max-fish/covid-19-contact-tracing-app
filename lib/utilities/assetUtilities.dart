@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class AssetUtils {
-  static Future<Map<String, dynamic>> loadLocaAuthorityCoordinates() async {
+  static Future<Map<String, dynamic>> loadLocalAuthorityCoordinates() async {
     final String coordinates = await rootBundle.loadString('assets/local_authority_coordinates.json');
     return jsonDecode(coordinates);
   }

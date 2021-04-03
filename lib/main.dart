@@ -5,7 +5,7 @@ import 'firebase/messagingService.dart';
 import 'models/covidMarkerModel.dart';
 import 'models/coronavirusDataModel.dart';
 import 'utilities/assetUtilities.dart';
-import 'utilities/coronavirusData.dart';
+import 'data_retriever/coronavirusData.dart';
 import 'utilities/userPreferences.dart';
 import 'widgets/covidHotspotMap.dart';
 import 'utilities/contactTracingUtilities.dart';
@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<CovidMarkerModel>> _getCovidData() async {
 
     final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
-    final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
+    final nameToCoordinates = await AssetUtils.loadLocalAuthorityCoordinates();
 
     final List<CoronavirusDataModel> allTierCovidData =
         await CoronavirusData.getAllTierCovidData();
