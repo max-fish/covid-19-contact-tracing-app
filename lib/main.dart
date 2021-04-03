@@ -16,10 +16,15 @@ import 'firebase/authService.dart';
 //main entry point for app
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // initialize connection with firebase
   await Firebase.initializeApp();
+  // sign in user if app is launched for the first time
   await AuthService.signInAnonIfNew();
+  // set up method channel connection
   ContactTracingUtilities.init();
+  // retrieve user preference object
   await UserPreferences.init();
+  // retrieve messaging token
   await MessagingService.init();
   runApp(MyApp());
 }
@@ -52,10 +57,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<CovidMarkerModel>> _getCovidData() async {
+
     final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
     final nameToCoordinates = await AssetUtils.loadLocaAuthorityCoordinates();
+
     final List<CoronavirusDataModel> allTierCovidData =
         await CoronavirusData.getAllTierCovidData();
+
+    //convert json to value object
     for (CoronavirusDataModel covidDataInArea in allTierCovidData) {
       final String areaName = covidDataInArea.areaName;
       final coordinates = nameToCoordinates[areaName];
