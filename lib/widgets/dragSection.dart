@@ -26,13 +26,14 @@ class _DragSectionState extends State<DragSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 30,
       decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: <BoxShadow>[
             BoxShadow(blurRadius: 20.0, color: Colors.black.withOpacity(0.2))
           ],
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0))),
       child: Column(
         children: [
           Container(

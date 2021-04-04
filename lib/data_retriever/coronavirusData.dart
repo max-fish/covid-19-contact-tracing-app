@@ -1,6 +1,6 @@
 import 'dart:convert';
 import '../models/coronavirusDataModel.dart';
-import 'dates.dart';
+import '../utilities/dates.dart';
 import 'package:http/http.dart' as http;
 
 class CoronavirusData {

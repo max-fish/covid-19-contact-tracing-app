@@ -16,6 +16,7 @@ class _MessageHandlerState extends State<MessageHandler> {
   void initState() {
     super.initState();
 
+    //check if app is started through notification
     FunctionService.getInitialMessage().then((message) {
       if(message != null) {
           Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {

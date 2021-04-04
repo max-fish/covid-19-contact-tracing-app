@@ -17,11 +17,11 @@ class ContactTracingUtilities {
   }
 
   static Future<void> _receivedMessage(MethodCall call) async {
-    if(call.method == 'messageReceived'){
-      final Message receivedMessage = Message.fromJsonString(call.arguments('message'));
+    if(call.method == 'receivedMessage') {
+      final Message receivedMessage = Message.fromJsonString(call.arguments['message']);
       final currentTime = DateTime.now();
       final dateFormat = DateFormat.yMMMd().add_Hm();
-      await FirestoreService.addContact(receivedMessage.fcmToken, dateFormat.format(currentTime));
+      await FirestoreService.addContact(receivedMessage.fcmToken, dateFormat.format(currentTime), receivedMessage.reason.toString());
     }
   }
 
@@ -50,6 +50,9 @@ class ContactTracingUtilities {
     try {
       await _platform.invokeMethod(
           'toggleContactTracing', <String, bool>{'shouldTrace': shouldTrace});
+      if(shouldTrace) {
+        publishNotSick(context);
+      }
       UserPreferences.setContactTracingPreference(shouldTrace);
       if (shouldTrace) {
         final snackBar =

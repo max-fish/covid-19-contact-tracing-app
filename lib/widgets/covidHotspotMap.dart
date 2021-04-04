@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:io';
+import 'searchBar.dart';
+
 import '../utilities/geolocator.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../utilities/mapPlaces.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:google_maps_webservice/places.dart';
 
 import '../models/covidMarkerModel.dart';
 import 'areaDescriptionTiles.dart';
@@ -42,9 +41,9 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
 
   int _markerIdCounter = 1;
 
-  static const CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(51.5074, 0.1278),
-    zoom: 11,
+  static const CameraPosition _UK = const CameraPosition(
+    target: LatLng(54.65478120656813, -3.1891666855373746),
+    zoom: 5.7,
   );
 
   Future<void> _setMarkers(BuildContext buildContext) async {
@@ -137,8 +136,9 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
             loading ? Colors.black.withOpacity(0.5) : Colors.transparent,
             BlendMode.srcATop),
         child: GoogleMap(
+            zoomControlsEnabled: false,
             mapType: MapType.normal,
-            initialCameraPosition: _kGooglePlex,
+            initialCameraPosition: _UK,
             onMapCreated: (GoogleMapController controller) async {
               googleMapController = controller;
               if (!_controller.isCompleted) {
@@ -180,39 +180,7 @@ class _CovidHotspotMapState extends State<CovidHotspotMap> {
               ),
             )
           : Container(),
-      Align(
-          alignment: const Alignment(0, -0.85),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3))
-                ]),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: PlacesAutocompleteField(
-                apiKey: GOOGLE_API_KEY,
-                mode: Mode.overlay,
-                leading: const Icon(Icons.search, color: Colors.blueGrey),
-                hint: 'Go Somewhere',
-                components: [Component(Component.country, 'uk')],
-                onSelected: (Prediction p) async {
-                  final PointLatLng latLng = await MapPlaces.getCoordinates(p);
-                  showRoute(latLng);
-                },
-                inputDecoration: const InputDecoration(
-                    contentPadding: EdgeInsets.only(
-                        top: 18, bottom: 18, left: 0, right: 0),
-                    border: OutlineInputBorder(borderSide: BorderSide.none)),
-              ),
-            ),
-          )),
+      SearchBar(googleApiKey: GOOGLE_API_KEY, showRoute: showRoute,)
     ]);
   }
 }

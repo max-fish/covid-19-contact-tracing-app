@@ -11,7 +11,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="covid_19_contact_tracing_app"
+        android:label="Walkdown"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data

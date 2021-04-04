@@ -30,6 +30,10 @@ import io.flutter.embedding.android.FlutterActivity;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodChannel;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 public class MainActivity extends FlutterActivity {
     private static final String CHANNEL = "nearby-message-api";
     private static final String TAG = "Nearby Message API";
@@ -55,6 +59,7 @@ public class MainActivity extends FlutterActivity {
                         case "notifyContactTracing":
                             notifyContactTracing(call.argument("message"));
                             result.success(null);
+                            break;
                         default:
                             result.notImplemented();
                             break;
@@ -66,6 +71,10 @@ public class MainActivity extends FlutterActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        AppCenter.start(getApplication(), "0087a3d1-1804-417f-8387-e3601e173aaf",
+                Analytics.class, Crashes.class);
+
         createNotificationChannel();
         mMessageListener = new MessageListener() {
             @Override
@@ -83,11 +92,11 @@ public class MainActivity extends FlutterActivity {
                         }
 
                         displayNotification("COVID Proximity Alert", contentText);
-
-                        methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
-                            put("message", messageString);
-                        }});
                     }
+
+                    methodChannel.invokeMethod("receivedMessage", new HashMap<String, String>() {{
+                        put("message", messageString);
+                    }});
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

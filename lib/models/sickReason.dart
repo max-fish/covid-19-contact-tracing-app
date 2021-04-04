@@ -1,6 +1,7 @@
 enum SickReason{
   SYMPTOMS,
-  POSITIVE_TEST
+  POSITIVE_TEST,
+  NOT_SICK
 }
 
 SickReason getReasonFromString(String stringedReason) {

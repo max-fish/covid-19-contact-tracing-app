@@ -13,7 +13,7 @@ class TestResult extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'We will now notify people who you have been in contact with that you have of COVID-19. No personal data will be shared. Is this ok?',
+              'We will now notify people who you have been in contact with that you have tested positive for COVID-19. No personal data will be shared. Is this ok?',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline6,),
             const SizedBox(
