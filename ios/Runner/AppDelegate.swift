@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import GoogleMaps
 
+//This class represents the iOS version of this app
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
     
@@ -20,21 +21,25 @@ import GoogleMaps
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     
+    //initialize notification center
     notifCenter = UNUserNotificationCenter.current()
 
+    //request permission to send notifications
     notifCenter.requestAuthorization(options: [.alert, .sound, .badge]) { (result, error) in
        
     }
     
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
     
+    //initialize Flutter method channel
     nearbyMessageChannel = FlutterMethodChannel(name: "nearby-message-api", binaryMessenger: controller.binaryMessenger)
     
+    //initialize message manager
     messageManager = GNSMessageManager(apiKey: "AIzaSyAhon76ezsL_Y_eI9Ddodr5jg8x-TjfvBw")
     
     GNSMessageManager.setDebugLoggingEnabled(true)
     
-    
+    //set Flutter method channel listener
     nearbyMessageChannel.setMethodCallHandler({
               (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
         switch call.method {
@@ -58,19 +63,23 @@ import GoogleMaps
     
     let contactTracingPref = UserDefaults.standard.bool(forKey: "flutter.contactTracing")
     
-    subscribe()
+    //if contact tracing is on, start listening to messages
+    if(contactTracingPref) {
+        subscribe()
+    }
     
     
     GeneratedPluginRegistrant.register(with: self)
     
-    
+    //google_maps_flutter setup
+    //uses google_maps_flutter library
     GMSServices.provideAPIKey("AIzaSyBEg5Tu1h46jO7sStSmdGwwuBMZO5PSz48")
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
     
     
-    
+    //when the toggle contact tracing button is pressed
     private func toggleContactTracing(shouldScan: Bool, result: FlutterResult) {
         if(shouldScan) {
             subscribe()
@@ -81,6 +90,8 @@ import GoogleMaps
         result(nil)
         }
     
+    //broadcast a message
+    //uses NearbyMessagesLibrary
     private func publish(message:String, result: FlutterResult) {
         publication =
             messageManager!.publication(with: GNSMessage(content: message.data(using: .utf8)), paramsBlock: { (params: GNSPublicationParams?) in
@@ -95,6 +106,8 @@ import GoogleMaps
         result(nil)
     }
     
+    //listen to signals
+    //uses NearbyMessages library
     private func subscribe() {
         subscription = (messageManager!.subscription(messageFoundHandler: { [unowned self] (message: GNSMessage?) in
             let messageString = String(data: (message?.content)!, encoding: .utf8)
@@ -124,6 +137,7 @@ import GoogleMaps
                         
                         let request = UNNotificationRequest(identifier: "ContentIdentifier", content: content, trigger: trigger)
                         
+                        //dispatch notificaiton if the user is sick
                         notifCenter.add(request) { (error) in
                             if error != nil {
                                 print("error \(String(describing: error))")
@@ -137,7 +151,7 @@ import GoogleMaps
             }
         },
         messageLostHandler: { (message: GNSMessage?) in
-            // Remove the name from the list
+            
         },
         paramsBlock:{ (params: GNSSubscriptionParams?) in
                   guard let params = params else { return }
@@ -150,6 +164,7 @@ import GoogleMaps
                 }))
     }
     
+    //stop listening to messsages
     private func unsubscribe(){
         subscription = nil
     }

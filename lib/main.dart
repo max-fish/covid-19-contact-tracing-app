@@ -17,6 +17,7 @@ import 'firebase/authService.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // initialize connection with firebase
+  //from firebase_core library
   await Firebase.initializeApp();
   // sign in user if app is launched for the first time
   await AuthService.signInAnonIfNew();
@@ -26,13 +27,16 @@ void main() async {
   await UserPreferences.init();
   // retrieve messaging token
   await MessagingService.init();
+  //initialize the app
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // set up listener for cloud messages
     FunctionService.init(context);
+    // start publishing not sick signal if user allows contact tracing
     if (UserPreferences.getContactTracingPreference().getValue()) {
       ContactTracingUtilities.publishNotSick(context);
     }
@@ -58,9 +62,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<CovidMarkerModel>> _getCovidData() async {
 
+    //get name to local authority coordinates file
     final List<CovidMarkerModel> covidMarkerData = List<CovidMarkerModel>();
     final nameToCoordinates = await AssetUtils.loadLocalAuthorityCoordinates();
 
+    //get covid data from uk gov api
     final List<CoronavirusDataModel> allTierCovidData =
         await CoronavirusData.getAllTierCovidData();
 
@@ -83,12 +89,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //main layout of app
     return Scaffold(
       body: FutureBuilder<List<CovidMarkerModel>>(
         future: _getCovidData(),
         builder: (BuildContext context,
             AsyncSnapshot<List<CovidMarkerModel>> snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            //when covid data is done loading, show app contents
             return Stack(
               children: [
                 Container(
@@ -100,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             );
           } else {
+            //display loading screen
             return Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

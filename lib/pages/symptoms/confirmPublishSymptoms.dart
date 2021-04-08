@@ -1,6 +1,7 @@
 import '../../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
+// Page that checks if the user wants to broadcast that they have symptoms
 class ConfirmPublishSymtoms extends StatelessWidget {
   final bool highTemp;
   final bool cough;
@@ -35,6 +36,7 @@ class ConfirmPublishSymtoms extends StatelessWidget {
                     color: Colors.red,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: const Text('Cancel', style: TextStyle(color: Colors.white),),
+                    //go back to home page
                     onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),),
                   const SizedBox(width: 10,),
                   RaisedButton(
@@ -43,6 +45,7 @@ class ConfirmPublishSymtoms extends StatelessWidget {
                   child: const Text('Submit', style: TextStyle(color: Colors.white)),
                   onPressed: () {
                     ContactTracingUtilities.publishSymptoms(context, startDate);
+                    //go back to home page
                     Navigator.popUntil(context, (route) => route.isFirst);
                   }
                 ),

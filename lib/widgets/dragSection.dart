@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import '../utilities/contactTracingUtilities.dart';
 import '../widgets/contactTracingAlertDialog.dart';
 
+// UI for the draggable (sticking out) part of the contact tracing bottom sheet
 class DragSection extends StatefulWidget {
   @override
   _DragSectionState createState() => _DragSectionState();
 }
 
 class _DragSectionState extends State<DragSection> {
-  bool locationSharing = false;
 
   @override
   void initState() {
     super.initState();
+      //if the user can not expressed a contact tracing preference, ask the user
       if(!UserPreferences.containsContactTracing()) {
         SchedulerBinding.instance.addPostFrameCallback(
                 (_) => showContactTracingAlertDialog(context)
@@ -49,13 +50,19 @@ class _DragSectionState extends State<DragSection> {
             children: [
               Material(
                 type: MaterialType.transparency,
+                //listens to contact tracing user preference
+                //uses streaming_shared_preferences
                 child: PreferenceBuilder<bool>(
                     preference: UserPreferences.getContactTracingPreference(),
                     builder: (BuildContext context, bool contactTracingPreference) {
+                      // the contact tracing status and toggle button
                       return Ink(
                         decoration: BoxDecoration(
+                          //if there is no contact tracing preference yet, default to false
                           color: contactTracingPreference ?? false
+                          //if contact tracing enabled, button is blue
                               ? Theme.of(context).primaryColor
+                          //if not enabled, button is greyed out
                               : Colors.grey[300],
                           shape: BoxShape.circle,
                         ),
@@ -63,8 +70,10 @@ class _DragSectionState extends State<DragSection> {
                           borderRadius: BorderRadius.circular(1000),
                           splashColor: Colors.grey,
                           onTap: () async {
+                            //toggle contact tracing preference
                             await ContactTracingUtilities.toggleContactTracing(
                                 context, !contactTracingPreference);
+                            //refresh button to change its color
                             setState(() {});
                           },
                           child: Padding(

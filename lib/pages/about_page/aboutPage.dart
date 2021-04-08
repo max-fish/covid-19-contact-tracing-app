@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// A page that describes the app
 class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

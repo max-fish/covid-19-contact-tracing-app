@@ -2,6 +2,7 @@ import 'sickReason.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
+// value object holding the user status for device-to-device communication
 class Message {
   final String fcmToken;
   final bool sick;
@@ -14,6 +15,7 @@ class Message {
       this.reason = SickReason.NOT_SICK,
       this.symptomsStartDate});
 
+  //make this object from a json string when receiving a message
   factory Message.fromJsonString(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
     return Message(
@@ -24,6 +26,7 @@ class Message {
     );
   }
 
+  //convert to json string when broadcasting this message
   String toJsonString() {
     return jsonEncode({
       'fcmToken': fcmToken,

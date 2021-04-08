@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'confirmSymptoms.dart';
 
+// Page that allows the user to select symptoms
 class SymptomsSelection extends StatefulWidget {
   @override
   _SymptomsSelectionState createState() => _SymptomsSelectionState();
@@ -85,6 +86,7 @@ class _SymptomsSelectionState extends State<SymptomsSelection> {
                   color: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                   onPressed: () {
+                    //continue to the confirm symptoms page
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return ConfirmSymptoms(confirmHighTemp: highTemp, confirmCough: cough, confirmChangeSmellTaste: changeSmellTaste,);
                     }));

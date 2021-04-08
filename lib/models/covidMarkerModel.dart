@@ -1,3 +1,4 @@
+// value object for a covid hotspot map marker
 class CovidMarkerModel {
   final String areaName;
   final String areaCode;

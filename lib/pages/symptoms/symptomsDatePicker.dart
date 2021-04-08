@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'confirmPublishSymptoms.dart';
 
+// Page that allows the start date of symptoms to be picked
 class SymptomsDatePicker extends StatefulWidget {
   final bool highTemp;
   final bool cough;
@@ -91,6 +92,7 @@ class _SymptomsDatePickerState extends State<SymptomsDatePicker> {
                   color: Theme.of(context).primaryColor,
                   child: const Text('Confirm Date', style: TextStyle(color: Colors.white),),
                   onPressed: () {
+                    //continue to the confirm publish symptoms page
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return const ConfirmPublishSymtoms();
                     }));

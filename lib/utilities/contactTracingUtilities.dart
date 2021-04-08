@@ -9,13 +9,16 @@ import '../models/sickReason.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// utility class that holds functions for contact tracing functionality
 class ContactTracingUtilities {
   static const _platform = const MethodChannel('nearby-message-api');
   
+  //set listener from native code
   static void init() {
     _platform.setMethodCallHandler(_receivedMessage);
   }
 
+  //add contact to firestore when message is received
   static Future<void> _receivedMessage(MethodCall call) async {
     if(call.method == 'receivedMessage') {
       final Message receivedMessage = Message.fromJsonString(call.arguments['message']);
@@ -25,6 +28,8 @@ class ContactTracingUtilities {
     }
   }
 
+  //vibrate device
+  //credit to Flutter docs: https://api.flutter.dev/flutter/services/HapticFeedback/mediumImpact.html
   static Future<void> _mediumImpact() async {
     await SystemChannels.platform.invokeMethod<void>(
       'HapticFeedback.vibrate',
@@ -32,6 +37,7 @@ class ContactTracingUtilities {
     );
   }
 
+  //shows status message temporarily
   static SnackBar _makeSnackBar(
       BuildContext context, String text, Color backgroundColor) {
     return SnackBar(
@@ -45,12 +51,14 @@ class ContactTracingUtilities {
     );
   }
 
+  //set opposite contact tracing preference and opposite functionality in native code
   static Future<void> toggleContactTracing(
       BuildContext context, bool shouldTrace) async {
     try {
       await _platform.invokeMethod(
           'toggleContactTracing', <String, bool>{'shouldTrace': shouldTrace});
       if(shouldTrace) {
+        //not sick by default
         publishNotSick(context);
       }
       UserPreferences.setContactTracingPreference(shouldTrace);
@@ -65,6 +73,7 @@ class ContactTracingUtilities {
       }
       await _mediumImpact();
     } on PlatformException catch (e) {
+      //show error message
       final snackBar = _makeSnackBar(context, e.message, Colors.red);
       Scaffold.of(context).showSnackBar(snackBar);
     }
@@ -89,6 +98,7 @@ class ContactTracingUtilities {
     _notifyContactedUsersHandler(SickReason.POSITIVE_TEST);
   }
 
+  //send contact tracing notification to device
   static void sendContactTracingAlert(BuildContext context, String message) async {
     try {
       await _platform.invokeMethod('notifyContactTracing', <String, String>{'message': message});
@@ -98,6 +108,7 @@ class ContactTracingUtilities {
     }
   }
 
+  //publish a message through native code
   static void _publish(BuildContext context, Message message) async {
     try {
       await _platform.invokeMethod(
@@ -108,6 +119,7 @@ class ContactTracingUtilities {
     }
   }
 
+  //notify the user's contacts of exposure
   static void _notifyContactedUsersHandler(SickReason sickReason) async {
     final bool hasContacts = await FirestoreService.hasContacts();
     if(hasContacts) {

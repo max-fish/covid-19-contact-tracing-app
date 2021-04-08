@@ -3,14 +3,18 @@ import '../models/coronavirusDataModel.dart';
 import '../utilities/dates.dart';
 import 'package:http/http.dart' as http;
 
+// A class that handles retrieving covid data from the uk gov api
+// This class uses the http library to request data
 class CoronavirusData {
 
+  //gets upper and lower tier local authority data and merges them
   static Future<List<CoronavirusDataModel>> getAllTierCovidData() async {
     final List<CoronavirusDataModel> upperTierCovidData = await _getTierData(true);
     final List<CoronavirusDataModel> lowerTierCovidData = await _getTierData(false);
     return [...upperTierCovidData, ...lowerTierCovidData];
   }
 
+  //gets either upper tier or lower tier local authority data
   static Future<List<CoronavirusDataModel>> _getTierData(bool upperTierData) async {
     final String yesterdayDate = DateUtils.yesterdayYearMonthDay;
     final String beforeYesterdayDate = DateUtils.dayBeforeYesterdayYearMonthDay;
@@ -38,6 +42,7 @@ class CoronavirusData {
     }
   }
 
+  //adds new cases from the day before as yesterday cases into the more recent list
   static _combineCovidDataForTwoDays(List todayCovidList, List yesterdayCovidList) {
     for(int i = 0; i < todayCovidList.length; i++){
       todayCovidList[i]['yesterdayCases'] = yesterdayCovidList[i]['newCases'];
