@@ -3,9 +3,8 @@
 An app designed to make users aware of their potential exposure to COVID-19.
 
 ## Setting up the project
-Note: If you would like to run this app for Android, you can skip this section! Check out [running the app for Android](#android).
-
-If you would like to run this app for iOS, setup needs to be done with an Apple machine that has Xcode.
+**Note: If you would like to run this app for Android, you can skip this
+ section! Check out [running the app for Android](#android). If you would like to run this app for iOS, setup needs to be done with an Apple machine that has Xcode.**
 
 
 1. Install the Flutter SDK from here: [https://flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
