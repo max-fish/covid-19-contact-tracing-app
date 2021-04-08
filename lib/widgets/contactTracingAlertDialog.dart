@@ -1,6 +1,7 @@
 import '../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
+//function that displays a box that queries the user for their contact tracing preference
 Future<void> showContactTracingAlertDialog(BuildContext dragSectionContext) {
   return showDialog<void>(
     context: dragSectionContext,
@@ -12,12 +13,14 @@ Future<void> showContactTracingAlertDialog(BuildContext dragSectionContext) {
         actions: [
           FlatButton(
             onPressed: () {
+              //ensure contact tracing is off
               ContactTracingUtilities.toggleContactTracing(dragSectionContext, false);
               Navigator.pop(context);
             },
             child: const Text('Leave it off')),
           FlatButton(
             onPressed: () {
+              //turns contact tracing on
               ContactTracingUtilities.toggleContactTracing(dragSectionContext, true);
               Navigator.pop(context);
             },

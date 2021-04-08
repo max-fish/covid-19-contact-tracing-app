@@ -1,6 +1,7 @@
 import '../../utilities/contactTracingUtilities.dart';
 import 'package:flutter/material.dart';
 
+// Page that asks if the user wants to broadcast that they have symptoms
 class TestResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class TestResult extends StatelessWidget {
                   color: Colors.red,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   child: const Text('Cancel', style: TextStyle(color: Colors.white),),
+                  //go back to home page
                   onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),),
                 const SizedBox(width: 10,),
                 RaisedButton(
@@ -35,6 +37,7 @@ class TestResult extends StatelessWidget {
                     child: const Text('Submit', style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       ContactTracingUtilities.publishPositiveTest(context);
+                      //go back to home page
                       Navigator.popUntil(context, (route) => route.isFirst);
                     }
                 ),

@@ -5,6 +5,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_webservice/directions.dart';
 import 'package:google_maps_webservice/places.dart';
 
+// UI for search bar 
 class SearchBar extends StatelessWidget {
   final String googleApiKey;
   final Function showRoute;
@@ -29,13 +30,18 @@ class SearchBar extends StatelessWidget {
               ]),
           child: Padding(
             padding: const EdgeInsets.only(left: 16),
+            //generate suggested places from user query
+            //uses flutter_google_places library
             child: PlacesAutocompleteField(
               apiKey: googleApiKey,
               mode: Mode.overlay,
               leading: const Icon(Icons.search, color: Colors.blueGrey),
               hint: 'Go Somewhere',
+              //Component object uses google_maps_webservice
               components: [Component(Component.country, 'uk')],
+              //Prediction object uses google_maps_webservice
               onSelected: (Prediction p) async {
+                //uses flutter_polyline_points
                 final PointLatLng latLng = await MapPlaces.getCoordinates(p);
                 showRoute(latLng);
               },

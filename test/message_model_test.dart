@@ -1,9 +1,8 @@
-
-
 import 'package:covid_19_contact_tracing_app/models/messageModel.dart';
 import 'package:covid_19_contact_tracing_app/models/sickReason.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+//uses flutter_test library
 void main() {
   test('Message model holds token, sickness, reason, and symptom date', () {
     final message = Message(fcmToken: 'testFcmToken', sick: true, reason: SickReason.POSITIVE_TEST, symptomsStartDate: DateTime.now());

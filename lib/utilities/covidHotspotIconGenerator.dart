@@ -5,9 +5,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+// Utility class which holds functions to draw covid hotspot markers
 class CovidHotspotIconGenerator {
   static Uint8List _covidHotspotIconByteData;
 
+  //resize icon based on the number of cases (size)
+  //BitmapDescriptor object is from the google_maps_flutter library
   static Future<BitmapDescriptor> getCovidHotpostIcon(int size) async {
     if (_covidHotspotIconByteData == null) {
       _covidHotspotIconByteData = await _generateCovidHotspotIcon();
@@ -22,12 +25,16 @@ class CovidHotspotIconGenerator {
     return BitmapDescriptor.fromBytes(resizedCovidHotspotIconByteData);
   }
 
+  //draw base icon
   static Future<Uint8List> _generateCovidHotspotIcon() async {
     const markerSize = 200;
     final pictureRecorder = PictureRecorder();
     final canvas = Canvas(pictureRecorder);
     final textPainter = TextPainter(textDirection: TextDirection.ltr);
     final iconString = String.fromCharCode(Icons.coronavirus.codePoint);
+
+    //credit to jbxbergdev:
+    //https://gist.github.com/jbxbergdev/5238bb78b03a2a4e6f24e55f442d2b70
 
     const circleStrokeWidth = markerSize / 10.0;
     const circleOffset = markerSize / 2;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// UI for a symptom selection card (used in symptom selector page)
 class SymptomCard extends StatelessWidget {
   SymptomCard(
       {@required this.active,

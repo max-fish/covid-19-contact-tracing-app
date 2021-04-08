@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'symptomsDatePicker.dart';
 
+// Page that confirms the users symptoms
 class ConfirmSymptoms extends StatelessWidget {
   final bool confirmHighTemp;
   final bool confirmCough;
@@ -90,6 +91,7 @@ class ConfirmSymptoms extends StatelessWidget {
                   textColor: Colors.white,
                   child: const Text('Confirm symptoms'),
                   onPressed: () {
+                    //continue to symptom date selector
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return SymptomsDatePicker(

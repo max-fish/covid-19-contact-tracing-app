@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// A page that tells the user what do if they get a notification
 class NotificationInformation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

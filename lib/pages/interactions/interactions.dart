@@ -4,12 +4,14 @@ import '../click_action/clickAction.dart';
 import '../../firebase/firestoreService.dart';
 import 'package:flutter/material.dart';
 
+// A page that lists history of interactions of the user
 class Interactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
         body: StreamBuilder(
+            //constantly listens to the database
             stream: FirestoreService.getContactsStream(),
             builder:
                 (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -53,6 +55,7 @@ class Interactions extends StatelessWidget {
                                     ],
                                   ),
                                   contentPadding: const EdgeInsets.all(8),
+                                  //goes to ClickAction page to explain the interaction in more detail
                                   onTap: () => Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
                                     return ClickAction(reason: reason, timeOfContact: document['timeOfContact']);
                                   })),
@@ -65,6 +68,7 @@ class Interactions extends StatelessWidget {
                     ),
                   );
                 } else {
+                  // when there have been no interactions
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
@@ -76,6 +80,7 @@ class Interactions extends StatelessWidget {
                   );
                 }
               } else {
+                //when the list of interactions is loading
                 return const Center(child: CircularProgressIndicator());
               }
             }));

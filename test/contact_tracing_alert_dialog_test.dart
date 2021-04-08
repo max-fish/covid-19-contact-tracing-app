@@ -26,6 +26,7 @@ Widget _testWidget(MockBuildContext context) {
   );
 }
 
+//uses mockito library
 class MockBuildContext extends Mock implements BuildContext {}
 
 void main() {
@@ -35,6 +36,7 @@ void main() {
     mockBuildContext = MockBuildContext();
   });
 
+  //uses flutter_test library
   testWidgets('Contact tracing alert dialog properly informs user', (WidgetTester tester) async {
     await tester.pumpWidget(_testWidget(mockBuildContext));
 

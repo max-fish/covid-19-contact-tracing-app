@@ -1,6 +1,7 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
+//uses flutter_driver library
 Future<FlutterDriver> setupAndGetDriver() async {
   final FlutterDriver driver = await FlutterDriver.connect();
   var connected = false;
@@ -13,6 +14,7 @@ Future<FlutterDriver> setupAndGetDriver() async {
   return driver;
 }
 
+// uses flutter_driver library
 void main() {
 
   group('app', () {

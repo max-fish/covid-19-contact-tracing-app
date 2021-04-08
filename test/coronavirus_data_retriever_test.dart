@@ -7,8 +7,8 @@ _combineCovidDataForTwoDays(List todayCovidList, List yesterdayCovidList) {
   }
 }
 
+//uses flutter_test library
 void main() {
-
   final todayCovidList = [{'areaName': 'test name', 'areaCode': '123456', 'newCases': 5}];
   const yesterdayCovidList = [{'areaName': 'test name', 'areaCode': '123456', 'newCases': 3}];
 

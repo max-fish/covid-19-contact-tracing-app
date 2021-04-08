@@ -2,6 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/covidMarkerModel.dart';
 import 'package:flutter/material.dart';
 
+// UI for data visualization of covid hotspots
 class AreaDescriptionTiles extends StatefulWidget {
   final List<CovidMarkerModel> covidData;
   final PageController pageController;
@@ -19,17 +20,21 @@ class _AreaDescriptionTilesState extends State<AreaDescriptionTiles> {
   Widget build(BuildContext context) {
     return Container(
         height: 210,
+        // enables users to swipe through different hotspot data
         child: PageView.builder(
             controller: widget.pageController,
             onPageChanged: (int index) {
               final CovidMarkerModel markerModel = widget.covidData[index];
               final LatLng newPos =
                   LatLng(markerModel.latitude, markerModel.longitude);
+              //move map to the location of the new hotspot data
+              //from google_maps_flutter library
               widget.googleMapController
                   .animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: newPos, zoom: 11)));
             },
             itemCount: widget.covidData.length,
             itemBuilder: (context, i) {
+              //UI for a particular covid hotspot
               final int currentCases = widget.covidData[i].newCases;
               final int yesterdayCases = widget.covidData[i].yesterdayCases;
               final int caseChange = currentCases - yesterdayCases;
@@ -77,6 +82,7 @@ class _AreaDescriptionTilesState extends State<AreaDescriptionTiles> {
   }
 }
 
+//displays the covid case difference from the previous day
 class CaseLabel extends StatelessWidget {
   final int caseChange;
 
@@ -85,6 +91,7 @@ class CaseLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (caseChange < 0) {
+      // if cases are lower than the day before
       return Row(
         children: [
           const Icon(
@@ -101,6 +108,7 @@ class CaseLabel extends StatelessWidget {
         ],
       );
     } else if (caseChange == 0) {
+      //if cases are then same as the day before
       return Row(children: [
         const Icon(Icons.horizontal_rule_rounded, color: Colors.blueGrey),
         Text(
@@ -112,6 +120,7 @@ class CaseLabel extends StatelessWidget {
         ),
       ]);
     } else {
+      //if cases are bigger than the day before
       return Row(
         children: [
           const Icon(Icons.north_rounded, color: Colors.red),

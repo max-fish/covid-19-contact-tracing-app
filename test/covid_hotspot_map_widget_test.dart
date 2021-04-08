@@ -20,6 +20,7 @@ Widget _testWidget() {
   );
 }
 
+//uses flutter_test library
 void main() {
   testWidgets('Covid Hotpot Map Displays loads successfully', (WidgetTester tester) async {
     await tester.pumpWidget(_testWidget());

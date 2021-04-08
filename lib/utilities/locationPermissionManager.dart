@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+//Utility class that holds a function to check location access permissions
 class LocationPermissionManager {
   static Future<bool> checkPermissions(BuildContext context) async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
+    // Check if location services are enabled
+    // uses geolocator library
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
 
     if (!serviceEnabled) {
+      //ask user to enable location services
       await showDialog(
           context: context,
           builder: (_) {
@@ -19,11 +22,13 @@ class LocationPermissionManager {
                   'Location services are disabled. Please enable them in location settings and restart the app.'),
               actions: [
                 FlatButton(
+                  // uses geolocator libary
                     onPressed: () => Geolocator.openLocationSettings(),
                     child: const Text('Open location settings')),
                 FlatButton(
                     onPressed: () async {
                       serviceEnabled =
+                      //uses geolocator library
                       await Geolocator.isLocationServiceEnabled();
                       Navigator.pop(context);
                     },
@@ -31,16 +36,21 @@ class LocationPermissionManager {
               ],
             );
           });
+      
       if (serviceEnabled == false) {
+        //deny permission if the user does not enable location services
         return false;
       }
     }
 
+      //uses geolocator library
       permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
+        //uses geolocator library
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.deniedForever) {
-          // Permissions are denied forever, handle appropriately.
+          // the app can no longer ask for permission
+          // tells user how to enable location permissions manually
           final bool permissionResult = await showDialog(
               context: context,
               builder: (_) {
@@ -51,8 +61,10 @@ class LocationPermissionManager {
                   actions: [
                     FlatButton(
                         onPressed: () async {
+                          //uses geolocator library
                           permission = await Geolocator.checkPermission();
                           if (permission != LocationPermission.deniedForever) {
+                            //uses geolocator library
                             permission = await Geolocator.requestPermission();
                             Navigator.pop(
                                 context, permission != LocationPermission
@@ -64,20 +76,18 @@ class LocationPermissionManager {
                           }
                         },
                         child: const Text('Ok')),
+                    //uses geolocator library
                     FlatButton(onPressed: () => Geolocator.openAppSettings(),
                         child: const Text('Open app settings'))
                   ],
                 );
               });
+          //resulting permission from the alert dialog
           return permissionResult;
         }
 
         if (permission == LocationPermission.denied) {
-          // Permissions are denied, next time you could try
-          // requesting permissions again (this is also where
-          // Android's shouldShowRequestPermissionRationale
-          // returned true. According to Android guidelines
-          // your App should show an explanatory UI now.
+          // ensure the user wants to deny location permissions
           final bool permissionResult = await showDialog(
               context: context,
               builder: (_) {
@@ -91,6 +101,7 @@ class LocationPermissionManager {
                         child: const Text('Ok')),
                     FlatButton(
                         onPressed: () async {
+                          //uses geolocator.library
                           permission = await Geolocator.requestPermission();
                           Navigator.pop(context,
                               permission != LocationPermission.denied &&
@@ -101,12 +112,15 @@ class LocationPermissionManager {
                   ],
                 );
               });
+          //resulting permission from the alert dialog
           return permissionResult;
         }
       }
+      //deny permission
       else if(permission == LocationPermission.deniedForever){
         return false;
       }
+      //allow to access location
       return true;
     }
 }

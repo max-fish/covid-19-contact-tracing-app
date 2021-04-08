@@ -1,6 +1,7 @@
 import 'package:covid_19_contact_tracing_app/utilities/assetUtilities.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+//uses flutter_test library
 void main () {
   TestWidgetsFlutterBinding.ensureInitialized();
 
