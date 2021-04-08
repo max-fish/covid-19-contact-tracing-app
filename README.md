@@ -21,7 +21,7 @@ project will be created inside the existing one.)
 1. Navigate to the root directly of this project in the command line.
 2. Run `flutter test` for unit and widget testing.
 3. To run integration testing,
-   1. Connect a mobile device to your computer (see configure a mobile device for testing).
+   1. [Configure your mobile device for testing](#configure-a-device-for-testing)
    2. run `flutter drive --target=test_driver/app.dart`
 
 
@@ -46,7 +46,7 @@ Unfortunately, due to Apple's very strict distribution guidelines,
 
 However, it is possible to run a debug build.
 
-1. Configure your iOS device for testing.
+1. [Configure your iOS device for testing](#ios)
 2. Open the ios/Runner.xcworkspace folder in Xcode.
 3. Make sure your iOS device is connected, on, and unlocked.
 4. Press the play button in the top menu bar of Xcode.
