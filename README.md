@@ -3,7 +3,7 @@
 An app designed to make users aware of their potential exposure to COVID-19.
 
 ## Setting up the project
-Note: If you would like to run this app for Android, you can skip this section! Check out running the app for Android below.
+Note: If you would like to run this app for Android, you can skip this section! Check out [running the app for Android](#android-1).
 
 If you would like to run this app for iOS, setup needs to be done with an Apple machine that has Xcode.
 
@@ -27,7 +27,7 @@ project will be created inside the existing one.)
 
 ## Running the app
 
-###  For Android:
+##  Android
 
 1. Go to this link: [https://install.appcenter.ms/orgs/walkdown-app-testers/apps/walkdown/distribution_groups/beta%20testers](https://install.appcenter.ms/orgs/walkdown-app-testers/apps/walkdown/distribution_groups/beta%20testers) on an Android device.
 2. Alternatively, you can scan this QR code:
@@ -40,7 +40,7 @@ When installing, your phone will you get a Play Store alert telling
 you that the developer is not trusted. This is normal behavior,
 since the app is not meant to be on the Play Store.
 
-###  For iOS:
+## iOS:
 Unfortunately, due to Apple's very strict distribution guidelines,
  the app could not be published.
 
