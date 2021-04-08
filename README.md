@@ -46,7 +46,7 @@ Unfortunately, due to Apple's very strict distribution guidelines,
 
 However, it is possible to run a debug build.
 
-1. [Configure your iOS device for testing](#ios)
+1. [Configure your iOS device for testing](#ios-1)
 2. Open the ios/Runner.xcworkspace folder in Xcode.
 3. Make sure your iOS device is connected, on, and unlocked.
 4. Press the play button in the top menu bar of Xcode.
