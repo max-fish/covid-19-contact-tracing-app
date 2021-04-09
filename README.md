@@ -35,7 +35,7 @@ An app designed to make users aware of their potential exposure to COVID-19.
 
 3. Follow the instructions on that page to install the app.
 
-When installing, your phone will you get a Play Store alert telling
+When installing, you will get a Play Store alert telling
 you that the developer is not trusted. This is normal behavior,
 since the app is not meant to be on the Play Store.
 
@@ -67,6 +67,11 @@ computer if that is necessary.
 5. Check if the computer sees your device by running `flutter devices`
 
 ### iOS
+#### Simulator
+1. Open iOS/Runner.xcworkspace file in Xcode.
+2. At the top menu bar of Xcode, there is button "Runner > *some ios device*"
+3. Click on it, and choose any device you like.
+
 #### Real device
 1. Open iOS/Runner.xcworkspace file in Xcode.
 2. Connect your device to your Mac via USB cable.
@@ -81,7 +86,7 @@ computer if that is necessary.
 11. Add your Apple ID account. If you don't have an Apple ID account,
 please make one here: [Create Apple ID](https://appleid.apple.com/cgi-bin/WebObjects/MyAppleId.woa/wa/createAppleId?localang=GB-EN&app_id=2083&returnURL=https%3A//secure4.store.apple.com/uk/shop/signIn%3Fc%3DaHR0cHM6Ly93d3cuYXBwbGUuY29tL3VrL3Nob3AvYmFnfDFhb3MyZDU3OTMzMWMyYjA4NDE2M2M4OTU4ZDEyNTJjNmMwZmMzNGMxMTY5%26r%3DSCDHYHP7CY4H9XK2H%26s%3DaHR0cHM6Ly93d3cuYXBwbGUuY29tL3VrL3Nob3AvYmFnfDFhb3MyZDU3OTMzMWMyYjA4NDE2M2M4OTU4ZDEyNTJjNmMwZmMzNGMxMTY5)
 12. Once your Apple ID account is added to Xcode, select in the team menu.
-13. When you select your team, Xcode it will you tell you that it
+13. When you select your team, Xcode will you tell you that it
 "Failed to register bundle identifier", because
 "No profiles for 'com.example.covid19ContactTracingApp' were found".
 14. To fix this, think of any unique bundle identifier and replace the
@@ -98,9 +103,4 @@ iOS device.
 21. Tap Trust *Your Developer Name*
 
 For a more visual explanation, please refer to this article: [iOS Device Setup](https://medium.com/front-end-weekly/how-to-test-your-flutter-ios-app-on-your-ios-device-75924bfd75a8)
-
-#### Simulator
-1. Open iOS/Runner.xcworkspace file in Xcode.
-2. At the top menu bar of Xcode, there is button "Runner > *some ios device*"
-3. Click on it, and choose any device you like.
 
