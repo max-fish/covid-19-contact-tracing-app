@@ -9,12 +9,13 @@ An app designed to make users aware of their potential exposure to COVID-19.
 
 1. Install the Flutter SDK from here: [https://flutter.dev/docs/get-started/install](https://flutter.dev/docs/get-started/install).
 2. Make sure to set the PATH variable as mentioned to access the Flutter command-line interface.
-3. Run `flutter doctor` in the command line to make sure the framework is up to date.
-4. Navigate to the root directly of the project and run `flutter create .`
-to generate the necessary iOS and Android build files.
-(The period after `create` is very important! Without it, a new Flutter
-project will be created inside the existing one.)
-5. Run `flutter packages get` to get the necessary dependencies.
+3. Install Cocoapods from here: [https://cocoapods.org](https://cocoapods.org)
+4. Make sure Cocoapods accessible from the command line.
+5. Run `flutter doctor` in the command line to make sure the Flutter SDK properly installed.
+6. Navigate to the root directory of this project.
+7. Run `flutter packages get` to get the necessary Flutter dependencies.
+8. Navigate to the ios folder
+9. Run `pod install` to get the necessary ios dependencies.
 
 ## Running tests
 1. Navigate to the root directly of this project in the command line.
@@ -27,7 +28,6 @@ project will be created inside the existing one.)
 ## Running the app
 
 ###  Android
-
 1. Go to this link: [https://install.appcenter.ms/orgs/walkdown-app-testers/apps/walkdown/distribution_groups/beta%20testers](https://install.appcenter.ms/orgs/walkdown-app-testers/apps/walkdown/distribution_groups/beta%20testers) on an Android device.
 2. Alternatively, you can scan this QR code:
 
@@ -53,6 +53,7 @@ However, it is possible to run a debug build.
 
 ## Configure a device for testing
 ###  Android
+#### Real device
 1. On the device, go to settings, and check if you have developer
 options at the bottom.
 2. If you don't,
@@ -66,9 +67,10 @@ computer if that is necessary.
 5. Check if the computer sees your device by running `flutter devices`
 
 ### iOS
+#### Real device
 1. Open iOS/Runner.xcworkspace file in Xcode.
 2. Connect your device to your Mac via USB cable.
-3. At the top menu bar of Xcode, there is button "Runner > *some iphone*"
+3. At the top menu bar of Xcode, there is button "Runner > *some ios device*"
 4. Tap on it, and select your device.
 5. In the file directory on the left side, click on the top-level Runner folder.
 6. Click on Runner in the "TARGETS" section in the central part of Xcode.
@@ -87,16 +89,18 @@ old one.
 15. Then click try again button below the "Failed to register bundle
 identifier" error.
 16. If you get a message saying "codesign wants to access key "access"
-in your keychain", type in the password you use to log on your Mac.
-17. Then tap "Always Allow".
-18. Make sure your iOS device is connected, on, and unlocked.
-19. In the top menu bar of Xcode, press the play button.
-20. The first time you run the app, Xcode will fail due to security.
-21. To fix this, go to settings -> general -> device management on your
+in your keychain", type in the password you use to log on your Mac, then tap "Always Allow".
+17. Make sure your iOS device is connected, on, and unlocked.
+18. In the top menu bar of Xcode, press the play button.
+19. The first time you run the app, Xcode will fail due to security.
+20. To fix this, go to settings -> general -> device management on your
 iOS device.
-22. Tap Trust *Your Developer Name*
+21. Tap Trust *Your Developer Name*
 
+For a more visual explanation, please refer to this article: [iOS Device Setup](https://medium.com/front-end-weekly/how-to-test-your-flutter-ios-app-on-your-ios-device-75924bfd75a8)
 
-
-
+#### Simulator
+1. Open iOS/Runner.xcworkspace file in Xcode.
+2. At the top menu bar of Xcode, there is button "Runner > *some ios device*"
+3. Click on it, and choose any device you like.
 
